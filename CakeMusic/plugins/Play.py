@@ -12,7 +12,8 @@ from typing import Union, List, Pattern
 from config import *
 from logging.handlers import RotatingFileHandler
 
-
+from typing import Union, List, Pattern
+from pyrogram import Client, filters as pyrofl
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_async_
@@ -60,6 +61,16 @@ QUEUE = {}
 
 
 # Command & Callback Handlers
+def cdx(commands: Union[str, List[str]]):
+    return pyrofl.command(commands, ["/", "!", "."])
+
+
+def cdz(commands: Union[str, List[str]]):
+    return pyrofl.command(commands, ["", "/", "!", "."])
+
+
+def rgx(pattern: Union[str, Pattern]):
+    return pyrofl.regex(pattern)
 
 
 
