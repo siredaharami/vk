@@ -1,13 +1,13 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from config import API_ID, API_HASH, BOT_TOKEN, OWNER_ID
-from CakeMusic import bot as app
+from CakeMusic import bot
 
 # Store sudo users in a set
 sudo_users = {OWNER_ID}  # Start with the owner as the default sudo user
 
 # Add Sudo User Command
-@app.on_message(filters.command("addsudo") & filters.user(OWNER_ID))
+@bot.on_message(filters.command("addsudo") & filters.user(OWNER_ID))
 async def add_sudo(client: Client, message: Message):
     if len(message.command) != 2:
         await message.reply_text("Usage: /addsudo <user_id>")
@@ -21,7 +21,7 @@ async def add_sudo(client: Client, message: Message):
         await message.reply_text("Invalid user ID. Please provide a numeric user ID.")
 
 # Remove Sudo User Command
-@app.on_message(filters.command("removesudo") & filters.user(OWNER_ID))
+@bot.on_message(filters.command("removesudo") & filters.user(OWNER_ID))
 async def remove_sudo(client: Client, message: Message):
     if len(message.command) != 2:
         await message.reply_text("Usage: /removesudo <user_id>")
@@ -42,7 +42,7 @@ async def remove_sudo(client: Client, message: Message):
         await message.reply_text("Invalid user ID. Please provide a numeric user ID.")
 
 # Sudo List Command
-@app.on_message(filters.command("sudolist"))
+@bot.on_message(filters.command("sudolist"))
 async def sudo_list(client: Client, message: Message):
     text = "**Sudo Users List:**\n\n"
     for user_id in sudo_users:
