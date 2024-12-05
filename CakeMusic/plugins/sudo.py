@@ -7,7 +7,7 @@ from CakeMusic import bot
 from CakeMusic.misc. import SUDOERS
 from CakeMusic.database import add_sudo, remove_sudo
 
-@bot.on_message(filters.command("addsudo") & filters.user(OWNER_ID))
+@bot.on_message(cdx(["addsudo"]) & ~pyrofl.private)
 async def useradd(client, message: Message):
     if MONGO_DB_URL is None:
         return await message.reply_text(
