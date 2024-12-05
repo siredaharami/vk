@@ -1,5 +1,6 @@
 from CakeMusic import bot as bot 
 from CakeMusic import *
+from CakeMusic.plugins.Play import *
 
 import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
