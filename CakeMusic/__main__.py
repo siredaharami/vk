@@ -82,7 +82,7 @@ async def main():
     LOGGER.info("✅ All Directories Updated.")
     await asyncio.sleep(1)
     LOGGER.info("🌐 Checking Required Variables ...")
-    if API_ID == 0:
+    if not API_ID:
         LOGGER.info("❌ 'API_ID' - Not Found ‼️")
         sys.exit()
     if not API_HASH:
