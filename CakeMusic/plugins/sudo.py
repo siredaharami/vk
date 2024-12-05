@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from config import API_ID, API_HASH, BOT_TOKEN, OWNER_ID
-from CakeMusic import app
+from CakeMusic import bot as app
 
 # Store sudo users in a set
 sudo_users = {OWNER_ID}  # Start with the owner as the default sudo user
