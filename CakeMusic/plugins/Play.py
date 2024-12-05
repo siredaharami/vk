@@ -1280,7 +1280,7 @@ async def broadcast_message(client, message):
             
 
 from config import MONGO_DB_URL, OWNER_ID
-from CakeMusic.misc. import SUDOERS
+from CakeMusic.misc import SUDOERS
 from CakeMusic.database import add_sudo, remove_sudo
 
 @bot.on_message(cdx(["addsudo"]) & ~pyrofl.private)
@@ -1383,6 +1383,3 @@ async def sudoers_list(client, message: Message):
         await message.reply_text("ɴᴏ sᴜᴅᴏ ᴜsᴇʀs ғᴏᴜɴᴅ.")
     else:
         await message.reply_text(text)
-
-
-
