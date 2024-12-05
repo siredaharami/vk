@@ -1,4 +1,4 @@
-from CakeMusic import mongodb
+from CakeMusic.misc import mongodb
 from typing import Dict, List, Union
 
 sudoersdb = mongodb.sudoers
