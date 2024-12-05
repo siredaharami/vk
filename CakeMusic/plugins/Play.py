@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 from typing import Union, List, Pattern
 from config import *
+from CakeMusic.misc import SUDOERS
 from logging.handlers import RotatingFileHandler
 
 from typing import Union, List, Pattern
@@ -1080,7 +1081,7 @@ With Your ☛ Other Friends.**"""
         return
 
 
-@bot.on_message(cdx("update") & bot_owner_only)
+@bot.on_message(cdx("update") & SUDOERS)
 async def update_repo_latest(client, message):
     response = await message.reply_text("Checking for available updates...")
     try:
@@ -1187,7 +1188,7 @@ async def check_total_stats(client, query):
         pass
 
 
-@bot.on_message(cdx(["broadcast", "gcast"]) & bot_owner_only)
+@bot.on_message(cdx(["broadcast", "gcast"]) & SUDOERS)
 async def broadcast_message(client, message):
     try:
         await message.delete()
