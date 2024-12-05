@@ -1277,9 +1277,9 @@ async def broadcast_message(client, message):
             await message.reply_text("**✅ Broadcast Messages To {0} Users.**".format(susr))
         except:
             pass
+            
 
 from config import MONGO_DB_URL, OWNER_ID
-from CakeMusic import bot
 from CakeMusic.misc. import SUDOERS
 from CakeMusic.database import add_sudo, remove_sudo
 
