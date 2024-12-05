@@ -1,4 +1,4 @@
-from config. import MONGO_DB_URL, OWNER_ID
+from config import MONGO_DB_URL, OWNER_ID
 from CakeMusic.misc import SUDOERS
 from pyrogram.types import Message
 from CakeMusic.database import add_sudo, remove_sudo
