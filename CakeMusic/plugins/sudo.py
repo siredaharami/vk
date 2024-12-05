@@ -1,10 +1,6 @@
-from pyrogram import filters
+from config. import MONGO_DB_URL, OWNER_ID
+from CakeMusic.misc import SUDOERS
 from pyrogram.types import Message
-from pyrogram import Client, filters as pyrofl
-
-from config import MONGO_DB_URL, OWNER_ID
-from CakeMusic import bot
-from CakeMusic.misc. import SUDOERS
 from CakeMusic.database import add_sudo, remove_sudo
 
 @bot.on_message(cdx(["addsudo"]) & ~pyrofl.private)
@@ -44,7 +40,7 @@ async def useradd(client, message: Message):
     return
 
 
-@bot.on_message(filters.command(["rmsudo", "delsudo"]) & filters.user(OWNER_ID))
+@bot.on_message(cdx(["rmsudo"]) & ~pyrofl.private)
 async def userdel(client, message: Message):
     if MONGO_DB_URL is None:
         return await message.reply_text(
@@ -77,7 +73,7 @@ async def userdel(client, message: Message):
     await message.reply_text("sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ʜᴀᴘᴘᴇɴᴇᴅ.")
 
 
-@bot.on_message(filters.command(["sudo", "sudolist"]))
+@bot.on_message(cdx(["sudolist"]) & ~pyrofl.private)
 async def sudoers_list(client, message: Message):
     text = "🔥<u> **ᴏᴡɴᴇʀ:**</u>\n"
     count = 0
