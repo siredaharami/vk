@@ -10,7 +10,7 @@ bot = Client(
     api_hash=API_HASH,
     bot_token=BOT_TOKEN,
     no_updates=False,
-    plugins=dict(root="CakeMusic.plugin"),
+    plugins=dict(root="CakeMusic.plugins"),
 )
 
 def cdx(commands: Union[str, List[str]]):
