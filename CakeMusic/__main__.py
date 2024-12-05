@@ -124,8 +124,8 @@ async def main():
         LOGGER.info(f"🚫 Assistant Error: {e}")
         sys.exit()
     try:
-        await app.join_chat("AdityaServer")
-        await app.join_chat("AdityaDiscus")
+        await app.join_chat("HEROKUBIN_01")
+        await app.join_chat("HEROKUBIN_01")
     except Exception:
         pass
     if LOG_GROUP_ID != 0:
@@ -144,7 +144,6 @@ async def main():
     LOGGER.info("✅ Sucessfully Hosted Your Bot !!")
     LOGGER.info("✅ Now Do Visit: @AdityaServer !!")
     await idle()
-
 
 
 
