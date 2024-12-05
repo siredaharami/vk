@@ -10,16 +10,16 @@ SUDOERS = filters.user()
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
 boot = time.time()
-mongodb = MongoCli(config.MONGO_URL)
+mongodb = MongoCli(config.MONGO_DB_URL)
 db = mongodb.Anonymous
-mongo = MongoClient(config.MONGO_URL)
-mongodb = mongo.VIP
+mongo = MongoClient(config.MONGO_DB_URL)
+mongodb = mongo.BAD
 OWNER = config.OWNER_ID
 _boot_ = time.time()
 def sudo():
     global SUDOERS
     OWNER = config.OWNER_ID
-    if config.MONGO_URL is None:
+    if config.MONGO_DB_URL is None:
         SUDOERS.add(OWNER)
     else:
         sudoersdb = mongodb.sudoers
