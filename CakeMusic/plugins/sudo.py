@@ -3,6 +3,7 @@ from config import MONGO_DB_URL, OWNER_ID
 from CakeMusic.misc import SUDOERS
 from pyrogram.types import Message
 from CakeMusic import bot
+from CakeMusic import *
 from CakeMusic.database import add_sudo, remove_sudo
 
 @bot.on_message(cdx(["addsudo"]) & ~pyrofl.private)
