@@ -4,7 +4,7 @@ import yt_dlp
 from yt_dlp import YoutubeDL
 from youtube_search import YoutubeSearch
 from CakeMusic import app
-
+from CakeMusic import *
 # Constants
 COOKIES_FILE = "cookies.txt"
 SPAM_WINDOW_SECONDS = 5
@@ -12,9 +12,7 @@ SPAM_THRESHOLD = 3
 user_last_message_time = {}
 user_command_count = {}
 
-@app.on_message(
-    filters.command(["song"], ".") & (filters.me | filters.user(SUDO_USER))
-)
+@bot.on_message(cdx("song"))
 async def download_song(client, message):
     user_id = message.from_user.id
     current_time = message.date.timestamp()
