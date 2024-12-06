@@ -52,7 +52,7 @@ mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.adityaxdb
 
 #edit reply 
-from CakeMusic.database.events import (
+from CakeMusic.database import events (
     edit_or_reply
 )
 eor = edit_or_reply
