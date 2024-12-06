@@ -22,7 +22,7 @@ from pyrogram import idle, __version__ as pyro_version
 
 
 
-@bot.on_message(cdx("update") & SUDOERS)
+@bot.on_message(cdx("update"))
 async def update_repo_latest(client, message):
     response = await message.reply_text("Checking for available updates...")
     try:
