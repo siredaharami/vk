@@ -2,6 +2,7 @@ import time
 import psutil
 import platform
 from pyrogram import filters
+from pyrogram import Client
 from CakeMusic import app
 from config import OWNER_ID
 
@@ -19,7 +20,7 @@ def get_readable_time(seconds: int) -> str:
     count %= 60
     return f"{days}d {hours}h {minutes}m {count}s"
 
-@app.on_message(
+@Client.on_message(
     filters.command(["ping"], ".") & (filters.me | filters.user(OWNER_ID))
 )
 async def ping_command(client, message):
