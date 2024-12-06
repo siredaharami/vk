@@ -1,8 +1,8 @@
 import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
 import sys, time, textwrap
-from CakeMusic import app as bot  # Bot Client
-from CakeMusic.plugins.Play import app, call  # Assistant Client
+from CakeMusic import bot
+from CakeMusic.plugins.Play import app, call
 from os import getenv
 from io import BytesIO
 from time import strftime
@@ -12,12 +12,15 @@ from datetime import datetime
 from typing import Union, List, Pattern
 from logging.handlers import RotatingFileHandler
 
+
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_async_
 
 from pyrogram import Client, filters as pyrofl
 from pytgcalls import PyTgCalls, filters as pytgfl
+
+
 from pyrogram import idle, __version__ as pyro_version
 from pytgcalls.__version__ import __version__ as pytgcalls_version
 
@@ -40,16 +43,9 @@ from PIL import ImageFilter, ImageFont, ImageOps
 from youtubesearchpython.__future__ import VideosSearch
 from config import *
 
+
 loop = asyncio.get_event_loop()
 
-# Userbot Client
-userbot = Client(
-    name="Userbot",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    session_string=STRING_SESSION,  # Replace with your session string
-    plugins=dict(root="CakeMusic.plugins"),  # Optional, same plugins folder
-)
 
 logging.basicConfig(
     format="[%(name)s]:: %(message)s",
@@ -73,16 +69,19 @@ async def main():
     LOGGER.info("🐬 Updating Directories ...")
     if "cache" not in os.listdir():
         os.mkdir("cache")
+    if "cookies.txt" not in os.listdir():
+        LOGGER.info("⚠️ 'cookies.txt' - Not Found❗")
+        sys.exit()
     if "downloads" not in os.listdir():
         os.mkdir("downloads")
     for file in os.listdir():
         if file.endswith(".session"):
             os.remove(file)
+    for file in os.listdir():
         if file.endswith(".session-journal"):
             os.remove(file)
     LOGGER.info("✅ All Directories Updated.")
     await asyncio.sleep(1)
-
     LOGGER.info("🌐 Checking Required Variables ...")
     if not API_ID:
         LOGGER.info("❌ 'API_ID' - Not Found ‼️")
@@ -96,55 +95,58 @@ async def main():
     if not STRING_SESSION:
         LOGGER.info("❌ 'STRING_SESSION' - Not Found ‼️")
         sys.exit()
-    if not MONGO_DB_URL:
-        LOGGER.info("❌ 'MONGO_DB_URL' - Not Found ‼️")
-        sys.exit()
-    LOGGER.info("✅ Required Variables Are Collected.")
 
+    if not MONGO_DB_URL:
+        LOGGER.info("'MONGO_DB_URL' - Not Found !!")
+        sys.exit()
+ #   try:
+     #   await mongo_async_cli.admin.command('ping')
+#    except Exception:
+   #     LOGGER.info("❌ 'MONGO_DB_URL' - Not Valid !!")
+    #    sys.exit()
+    LOGGER.info("✅ Required Variables Are Collected.")
     await asyncio.sleep(1)
     LOGGER.info("🌀 Starting All Clients ...")
-    
-    # Starting Bot
     try:
         await bot.start()
-        LOGGER.info("✅ Bot Started.")
-        if LOG_GROUP_ID != 0:
-            await bot.send_message(LOG_GROUP_ID, "**🤖 Bot Started.**")
     except Exception as e:
         LOGGER.info(f"🚫 Bot Error: {e}")
         sys.exit()
-
-    # Starting Userbot
-    try:
-        await userbot.start()
-        LOGGER.info("✅ Userbot Started.")
-        if LOG_GROUP_ID != 0:
-            await userbot.send_message(LOG_GROUP_ID, "**👤 Userbot Started.**")
-    except Exception as e:
-        LOGGER.info(f"🚫 Userbot Error: {e}")
-        sys.exit()
-
-    # Starting Assistant (from Play plugin)
+    if LOG_GROUP_ID != 0:
+        try:
+            await bot.send_message(LOG_GROUP_ID, "**🤖 Bot Started.**")
+        except Exception:
+            pass
+    LOGGER.info("✅ Bot Started.")
     try:
         await app.start()
-        await app.join_chat("HEROKUBIN_01")  # Replace with your group/channel
-        LOGGER.info("✅ Assistant Started.")
-        if LOG_GROUP_ID != 0:
-            await app.send_message(LOG_GROUP_ID, "**🦋 Assistant Started.**")
     except Exception as e:
         LOGGER.info(f"🚫 Assistant Error: {e}")
         sys.exit()
-
-    # Starting PyTgCalls
+    try:
+        await app.join_chat("HEROKUBIN_01")
+        await app.join_chat("HEROKUBIN_01")
+    except Exception:
+        pass
+    if LOG_GROUP_ID != 0:
+        try:
+            await app.send_message(LOG_GROUP_ID, "**🦋 Assistant Started.**")
+        except Exception:
+            pass
+    LOGGER.info("✅ Assistant Started.")
     try:
         await call.start()
-        LOGGER.info("✅ PyTgCalls Started.")
     except Exception as e:
         LOGGER.info(f"🚫 PyTgCalls Error: {e}")
         sys.exit()
-
-    LOGGER.info("✅ Successfully Hosted Your Bot!")
+    LOGGER.info("✅ PyTgCalls Started.")
+    await asyncio.sleep(1)
+    LOGGER.info("✅ Sucessfully Hosted Your Bot !!")
+    LOGGER.info("✅ Now Do Visit: @AdityaServer !!")
     await idle()
+
+
+
 
 if __name__ == "__main__":
     loop.run_until_complete(main())
