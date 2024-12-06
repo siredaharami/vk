@@ -2,7 +2,7 @@ import time
 import psutil
 import platform
 from pyrogram import filters
-from CakeMusic.__main__. import app
+from CakeMusic import app
 from config import OWNER_ID
 
 # Record the bot's start time
