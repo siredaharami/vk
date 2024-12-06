@@ -59,6 +59,8 @@ app = Client(
     api_id=API_ID,
     api_hash=API_HASH,
     session_string=str(STRING_SESSION),
+    plugins=dict(root="CakeMusic.plugins"),
+)
 )
 
 logging.getLogger("apscheduler").setLevel(logging.ERROR)
