@@ -15,7 +15,7 @@ async def pm_on_off(client, message):
     if len(message.command) < 2:
         return await eor(
             message,
-            "Hey, What You Want To Do ?\n\nExample: `.pm on` | `.pm off`"
+            "Hey, What You Want To Do?\n\nExample: `.pm on` | `.pm off`"
         )
     aux = await eor(message, "Processing ...")
     query = message.text.split(None, 1)[1].lower()
@@ -29,6 +29,38 @@ async def pm_on_off(client, message):
         if set_permit:
             return await aux.edit("PM Permit Turned Off!")
         return await aux.edit("PM Permit Already Off!")
+
+
+@app.on_message(filters.private & ~filters.me & ~filters.bot)
+async def pm_guard(client, message):
+    """Handles incoming private messages when PM Guard is on."""
+    is_pm_permit_on = await get_pm_permit()  # Check if PM Permit is enabled
+    if not is_pm_permit_on:
+        return  # PM Guard is turned off, do nothing
+
+    user_id = message.from_user.id
+    approved = await is_approved_user(user_id)  # Check if the user is approved
+
+    if approved:
+        return  # User is already approved, allow the message
+
+    # Alert message for unapproved users
+    warning_message = (
+        "**🚨 Alert: PM Not Allowed 🚨**\n\n"
+        "Hello! You are not approved to send me messages. "
+        "Please wait for approval or stop messaging to avoid being blocked."
+    )
+    await message.reply(warning_message)
+
+    # Optional: Store or increment warnings for the user (add your logic here)
+    # For example, disconnect after 3 warnings:
+    # if warnings >= 3:
+    #     await client.block_user(user_id)
+
+async def get_pm_permit():
+    """Fetch the current PM Permit status."""
+    # Replace with your database or config logic to fetch PM status
+    return True  # Assuming it's enabled for now
 
 
 @app.on_message(
