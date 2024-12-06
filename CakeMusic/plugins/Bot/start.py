@@ -48,7 +48,7 @@ from youtubesearchpython.__future__ import VideosSearch
 
 
 
-@bot.on_message(cdx(["start"]) & pyrofl.private)
+@bot.on_message(cdx(["help"]) & pyrofl.private)
 async def start_message_private(client, message):
     user_id = message.from_user.id
     mention = message.from_user.mention
