@@ -1,3 +1,4 @@
+from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
 from typing import Union, List, Pattern
 from pytgcalls import PyTgCalls, filters as pytgfl
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
