@@ -1325,7 +1325,6 @@ async def ping_command(client, message):
         f"📡 ʀᴇꜱᴘᴏɴꜱᴇ ᴛɪᴍᴇ `{ping_time:.2f} ms`\n"
         f"⏱ ᴜᴘᴛɪᴍᴇ `{uptime}`\n"
         f"🖥 ꜱʏꜱᴛᴇᴍ ɪɴꜰᴏ `{system_info}`\n"
-        f"⚙️ ᴄᴘᴜ ᴜꜱᴀɢᴇ `{cpu_usage}%`\n"
         f"💾 ᴍᴇᴍᴏʀʏ ᴜꜱᴀɢᴇ `{memory_usage}%`"
     )
     await reply.edit_text(response_text)
