@@ -37,6 +37,18 @@ def rgx(pattern: Union[str, Pattern]):
     """Filter messages matching a regex pattern."""
     return pyrofl.regex(pattern)
 
+bot_owner_only = pyrofl.user(OWNER_ID)
+
+
+call = PyTgCalls(app)
+call_config = GroupCallConfig(auto_start=False)
+
+mongo_async_cli = _mongo_async_(MONGO_DB_URL)
+mongodb = mongo_async_cli.adityaxdb
+
+# store start time
+__start_time__ = time.time()
+
 
 # Start both clients
 if __name__ == "__main__":
