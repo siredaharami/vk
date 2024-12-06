@@ -1,5 +1,6 @@
 import asyncio
 from CakeMusic import *
+from CakeMusic.plugins.Play import *
 from CakeMusic import app
 from pyrogram import Client, filters as pyrofl
 from config import MONGO_DB_URL, OWNER_ID
