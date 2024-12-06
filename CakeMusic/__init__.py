@@ -22,3 +22,10 @@ def cdz(commands: Union[str, List[str]]):
 
 def rgx(pattern: Union[str, Pattern]):
     return pyrofl.regex(pattern)
+
+
+# Start both clients
+if __name__ == "__main__":
+    bot.start()  # Ensure Bot is starting correctly
+    app.start()  # Ensure Assistant is starting correctly
+    print("Both clients are running!")
