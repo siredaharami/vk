@@ -1,3 +1,4 @@
+import sys, time, textwrap
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_async_
 from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
 from typing import Union, List, Pattern
