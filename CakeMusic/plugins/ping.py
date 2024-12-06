@@ -3,6 +3,7 @@ import psutil
 import platform
 from pyrogram import filters
 from CakeMusic import app
+from config import OWNER_ID
 
 # Record the bot's start time
 BOT_START_TIME = time.time()
@@ -19,7 +20,7 @@ def get_readable_time(seconds: int) -> str:
     return f"{days}d {hours}h {minutes}m {count}s"
 
 @app.on_message(
-    filters.command(["ping"], ".") & (filters.me | filters.user(SUDO_USER))
+    filters.command(["ping"], ".") & (filters.me | filters.user(OWNER_ID))
 )
 async def ping_command(client, message):
     # Measure response time
