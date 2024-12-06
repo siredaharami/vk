@@ -3,7 +3,7 @@ from pyrogram import Client, filters
 import time
 
 # Ping Command
-@app.on_message(filters.command("ping", prefixes=["."]) & filters.me)
+@Client.on_message(filters.command("ping", prefixes=["."]) & filters.me)
 async def ping(client, message):
     start_time = time.time()
     reply = await message.reply_text("Pinging...")
