@@ -1,12 +1,14 @@
-from pyrogram import Client, filters
-import time
+import asyncio
+from CakeMusic import *
 from CakeMusic import app
+from pyrogram import Client, filters as pyrofl
+from config import MONGO_DB_URL, OWNER_ID
+from CakeMusic.misc import SUDOERS
+from pyrogram.types import Message
 
-# Ping Command
-@app.on_message(filters.command("ping", prefixes=["."]) & filters.me)
-async def ping(client, message):
-    start_time = time.time()
-    reply = await message.reply_text("Pinging...")
-    end_time = time.time()
-    ping_time = round((end_time - start_time) * 1000)  # Convert to ms
-    await reply.edit_text(f"Pong! 🏓\nPing: {ping_time} ms")
+@app.on_message(cdx(["restart"]) & SUDOERS)
+async def restart(client: Client, message: Message):
+    reply = await message.reply_text("ʀᴇꜱᴛᴀʀᴛɪɴɢ...")
+    await message.delete()
+    await reply.edit_text("ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ʀᴇꜱᴛᴀʀᴛᴇᴅ ʙᴏᴛ...\n\n💞 ᴡᴀɪᴛ 1-2 ᴍɪɴᴜᴛᴇꜱ\nʟᴏᴀᴅ ᴘʟᴜɢɪɴꜱ...</b>")
+    os.system(f"kill -9 {os.getpid()} && python3 -m CakeMusic")
