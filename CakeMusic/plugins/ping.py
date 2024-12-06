@@ -1,4 +1,3 @@
-from CakeMusic import app
 from pyrogram import Client, filters
 import time
 
