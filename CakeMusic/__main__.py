@@ -1,7 +1,7 @@
 import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
 import sys, time, textwrap
-from CakeMusic.plugins.Play import app, bot, call
+from CakeMusic  import app, bot, call
 from os import getenv
 from io import BytesIO
 from time import strftime
