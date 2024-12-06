@@ -3,9 +3,10 @@ from pyrogram import Client, filters
 import asyncio
 from CakeMusic import app
 from pyrogram import Client
+from CakeMusic.misc import SUDOERS
 
 @app.on_message(
-    filters.command(["restart"], ".") & (filters.me | filters.user(SUDO_USER))
+    filters.command(["restart"], ".") & (filters.me | filters.user(SUDOERS))
 )
 async def restart(client: Client, message: Message):
     reply = await message.reply_text("ʀᴇꜱᴛᴀʀᴛɪɴɢ...")
