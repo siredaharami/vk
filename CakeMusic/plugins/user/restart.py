@@ -1,4 +1,5 @@
 from pyrogram.types import Message
+from pyrogram import Client, filters
 import asyncio
 from CakeMusic import app
 from pyrogram import Client
