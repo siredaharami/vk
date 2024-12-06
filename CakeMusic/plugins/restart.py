@@ -1,12 +1,12 @@
 import asyncio
 from CakeMusic import *
-from CakeMusic import bot
+from CakeMusic import app
 from pyrogram import Client, filters as pyrofl
 from config import MONGO_DB_URL, OWNER_ID
 from CakeMusic.misc import SUDOERS
 from pyrogram.types import Message
 
-@bot.on_message(cdx(["restart"]) & SUDOERS)
+@app.on_message(cdx(["pause", "vpause"]) & ~pyrofl.private)
 async def restart(client: Client, message: Message):
     reply = await message.reply_text("ʀᴇꜱᴛᴀʀᴛɪɴɢ...")
     await message.delete()
