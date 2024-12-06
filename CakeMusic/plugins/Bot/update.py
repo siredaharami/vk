@@ -1,3 +1,27 @@
+import aiohttp, aiofiles, asyncio, base64, logging
+import os, platform, random, re, socket
+import sys, time, textwrap
+from CakeMusic import bot, app
+from CakeMusic import *
+from os import getenv
+from io import BytesIO
+from time import strftime
+from functools import partial
+from dotenv import load_dotenv
+from datetime import datetime
+
+from typing import Union, List, Pattern
+from pyrogram import Client, filters as pyrofl
+from git import Repo
+from git.exc import GitCommandError, InvalidGitRepositoryError
+
+from pyrogram import Client, filters as pyrofl
+from pytgcalls import PyTgCalls, filters as pytgfl
+
+from pyrogram import idle, __version__ as pyro_version
+
+
+
 @bot.on_message(cdx("update") & SUDOERS)
 async def update_repo_latest(client, message):
     response = await message.reply_text("Checking for available updates...")
