@@ -4,11 +4,12 @@ from config import *
 
 
 
-bot = Client(
-    name="Bot",
+# Assistant Client
+app = Client(
+    name="Assistant",
     api_id=API_ID,
     api_hash=API_HASH,
-    bot_token=BOT_TOKEN,
+    session_string=str(STRING_SESSION),
     plugins=dict(root="CakeMusic.plugins"),
 )
 
