@@ -52,10 +52,14 @@ mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.adityaxdb
 
 #edit reply 
-from .database.events import (
+from CakeMusic.database.events import (
     edit_or_reply
 )
 eor = edit_or_reply
+
+# Variables
+from CakeMusic.database import templates
+vars = templates
 
 # store start time
 __start_time__ = time.time()
