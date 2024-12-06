@@ -1,6 +1,11 @@
 from pyrogram import Client, filters
+from config import OWNER_ID
+from CakeMusic import *
 
-@Client.on_message(filters.command("ping"))
+
+@app.on_message(
+    filters.command(["ping"], ".") & (filters.me | filters.user(OWNER_ID))
+)
 async def ping(client, message):
     # Stylish text
     reply_text = "⚡ **Ping Pong!**\n💠 Bot is Online and Working Perfectly!"
