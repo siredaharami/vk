@@ -44,14 +44,6 @@ from PIL import Image, ImageDraw, ImageEnhance
 from PIL import ImageFilter, ImageFont, ImageOps
 from youtubesearchpython.__future__ import VideosSearch
 
-app = Client(
-    name="App",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    session_string=str(STRING_SESSION),
-)
-
-
 # Memory Database
 
 ACTIVE_AUDIO_CHATS = []
@@ -59,46 +51,6 @@ ACTIVE_VIDEO_CHATS = []
 ACTIVE_MEDIA_CHATS = []
 
 QUEUE = {}
-
-
-# Command & Callback Handlers
-def cdx(commands: Union[str, List[str]]):
-    return pyrofl.command(commands, ["/", "!", "."])
-
-
-def cdz(commands: Union[str, List[str]]):
-    return pyrofl.command(commands, ["", "/", "!", "."])
-
-
-def rgx(pattern: Union[str, Pattern]):
-    return pyrofl.regex(pattern)
-
-
-
-
-bot_owner_only = pyrofl.user(OWNER_ID)
-
-
-# all clients
-
-
-call = PyTgCalls(app)
-call_config = GroupCallConfig(auto_start=False)
-
-mongo_async_cli = _mongo_async_(MONGO_DB_URL)
-mongodb = mongo_async_cli.adityaxdb
-
-# store start time
-__start_time__ = time.time()
-
-
-# start and run
-
-
-
-
-
-
 
 
 # Some Required Functions ...!!
@@ -204,11 +156,6 @@ async def add_served_user(user_id: int):
     if is_served:
         return
     return await usersdb.insert_one({"user_id": user_id})
-
-
-
-
-
 
 
 
