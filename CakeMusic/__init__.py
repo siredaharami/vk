@@ -16,7 +16,7 @@ app = Client(
     name="Userbot",
     api_id=API_ID,
     api_hash=API_HASH,
-    session_string=SESSION_STRING,  # Replace with your session string
+    session_string=STRING_SESSION,  # Replace with your session string
     plugins=dict(root="CakeMusic.plugins"),  # Optional, same plugins folder
 )
 
