@@ -1,4 +1,4 @@
-from CakeMusic import bot as bot 
+from CakeMusic import app as bot 
 from CakeMusic import *
 from CakeMusic.plugins.Play import *
 
