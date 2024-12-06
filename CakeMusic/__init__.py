@@ -5,7 +5,7 @@ from config import *
 
 
 # Assistant Client
-app = Client(
+bot = Client(
     name="Assistant",
     api_id=API_ID,
     api_hash=API_HASH,
