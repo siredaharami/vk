@@ -1,9 +1,8 @@
 import asyncio
-
 from math import ceil
 from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton
-from typing import Union, List
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from typing import Dict, List, Optional
 
 from CakeMusic import bot
 
@@ -19,71 +18,58 @@ class EqInlineKeyboardButton(InlineKeyboardButton):
         return self.text > other.text
 
 
-def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
-    if not chat:
-        plugins = sorted(
-            [
-                EqInlineKeyboardButton(
-                    x.__NAME__,
-                    callback_data="{}_plugin({})".format(
-                        prefix, x.__NAME__.lower()
-                    ),
-                )
-                for x in plugin_dict.values()
-            ]
-        )
-    else:
-        plugins = sorted(
-            [
-                EqInlineKeyboardButton(
-                    x.__NAME__,
-                    callback_data="{}_plugin({},{})".format(
-                        prefix, chat, x.__NAME__.lower()
-                    ),
-                )
-                for x in plugin_dict.values()
-            ]
-        )
+def paginate_plugins(
+    page_n: int, plugin_dict: Dict[str, object], prefix: str, chat: Optional[Union[str, int]] = None
+) -> InlineKeyboardMarkup:
+    """
+    Paginate plugins into a grid of InlineKeyboardButtons.
+    Args:
+        page_n (int): Current page number.
+        plugin_dict (dict): Dictionary containing plugins with '__NAME__' attribute.
+        prefix (str): Prefix used in callback data.
+        chat (Optional[Union[str, int]]): Optional chat ID for callback data.
 
-    pairs = list(zip(plugins[::3], plugins[1::3], plugins[2::3]))
-    i = 0
-    for m in pairs:
-        for _ in m:
-            i += 1
-    if len(plugins) - i == 1:
-        pairs.append((plugins[-1],))
-    elif len(plugins) - i == 2:
-        pairs.append(
-            (
-                plugins[-2],
-                plugins[-1],
+    Returns:
+        InlineKeyboardMarkup: Paginated InlineKeyboardMarkup object.
+    """
+    # Generate plugin buttons
+    plugins = sorted(
+        [
+            EqInlineKeyboardButton(
+                plugin.__NAME__,
+                callback_data=f"{prefix}_plugin({chat},{plugin.__NAME__.lower()})"
+                if chat
+                else f"{prefix}_plugin({plugin.__NAME__.lower()})",
             )
-        )
-
-    COLUMN_SIZE = 3
-
-    max_num_pages = ceil(len(pairs) / COLUMN_SIZE)
-    modulo_page = page_n % max_num_pages
-
-    # can only have a certain amount of buttons side by side
-    if len(pairs) > COLUMN_SIZE:
-        pairs = pairs[
-            modulo_page * COLUMN_SIZE : COLUMN_SIZE * (modulo_page + 1)
-        ] + [
-            (
-                EqInlineKeyboardButton(
-                    "❮",
-                    callback_data="{}_prev({})".format(prefix, modulo_page),
-                ),
-                EqInlineKeyboardButton(
-                    "✯ ᴏᴡɴᴇʀ ✯",
-                    url=f"tg://openmessage?user_id={bot.me.id}",
-                ),
-                EqInlineKeyboardButton(
-                    "❯",
-                    callback_data="{}_next({})".format(prefix, modulo_page),
-                ),
-            )
+            for plugin in plugin_dict.values()
         ]
+    )
 
-    return pairs
+    # Group plugins into rows of 3 buttons
+    pairs = [plugins[i : i + 3] for i in range(0, len(plugins), 3)]
+
+    # Calculate pagination
+    COLUMN_SIZE = 3
+    total_pages = ceil(len(pairs) / COLUMN_SIZE)
+    current_page = page_n % total_pages
+
+    # Slice for the current page
+    page_pairs = pairs[current_page * COLUMN_SIZE : (current_page + 1) * COLUMN_SIZE]
+
+    # Add navigation buttons if there are multiple pages
+    if len(pairs) > COLUMN_SIZE:
+        page_pairs.append(
+            [
+                EqInlineKeyboardButton(
+                    "❮", callback_data=f"{prefix}_prev({current_page})"
+                ),
+                EqInlineKeyboardButton(
+                    "✯ Owner ✯", url=f"tg://openmessage?user_id={bot.me.id}"
+                ),
+                EqInlineKeyboardButton(
+                    "❯", callback_data=f"{prefix}_next({current_page})"
+                ),
+            ]
+        )
+
+    return InlineKeyboardMarkup(page_pairs)
