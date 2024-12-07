@@ -15,7 +15,7 @@ from config import *
 
 @bot.on_inline_query(filters.regex(r"help_menu"))
 async def help_inline(_, query: InlineQuery):
-    if not query.from_user.id in Config.AUTH_USERS:
+    if not query.from_user.id in config.AUTH_USERS:
         return
     no_of_plugins = len(Config.CMD_MENU)
     no_of_commands = len(Config.CMD_INFO)
