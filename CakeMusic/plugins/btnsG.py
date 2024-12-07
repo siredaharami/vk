@@ -2,7 +2,7 @@ from math import ceil
 
 from pyrogram.types import InlineKeyboardButton
 
-from Pbxbot.core import ENV, Symbols, db
+from config import ENV, Symbols, db
 
 
 def gen_inline_keyboard(collection: list, row: int = 2) -> list[list[InlineKeyboardButton]]:
