@@ -1,4 +1,5 @@
 from CakeMusic import *
+from config import Symbols
 
 class HelpMenu:
     def __init__(self, file: str) -> None:
