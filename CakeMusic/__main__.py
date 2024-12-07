@@ -31,7 +31,7 @@ from pytgcalls import PyTgCalls, filters as pytgfl
 from pytgcalls.exceptions import NoActiveGroupCall
 from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
-from pyrogram.__version__ as pyrogram_version
+from pyrogram import __version__ as pyrogram_version
 from pytgcalls.__version__ as pytgcalls_version
 from PIL import Image, ImageDraw, ImageEnhance
 from PIL import ImageFilter, ImageFont, ImageOps
