@@ -1,150 +1,86 @@
 from pyrogram import filters
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
-from CakeMusic import app, bot  # Importing app from YukkiMusic
 from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineQuery,
     InlineQueryResultArticle,
     InputTextMessageContent,
+    InlineKeyboardButton
 )
-from pyrogram.types import Message
+from CakeMusic import app  # Importing the app from CakeMusic
 
-ASSISTANT_ID =  6331052940  # Replace with the actual Telegram ID of your assistant
-plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
-COMMANDS_PER_PLUGIN = 1  # 1 command per plugin
-PLUGINS_PER_PAGE = 4  # Only 4 plugins per page
+# Constants (Previously in Config)
+AUTH_USERS = [123456789, 987654321]  # List of user IDs who can access the help menu
+CMD_MENU = ["Plugin1", "Plugin2", "Plugin3", "Plugin4"]  # List of plugin names
+CMD_INFO = {"Plugin1": "Description of Plugin1", "Plugin2": "Description of Plugin2"}  # Command descriptions
 
+# Helper functions (Previously in btnsG and templates)
+async def gen_inline_help_buttons(page_number, cmd_menu):
+    buttons = []
+    items_per_page = 5  # Number of items to display per page
+    start = page_number * items_per_page
+    end = start + items_per_page
+    cmd_page = cmd_menu[start:end]
 
-# Function to generate inline buttons for help menu
-def generate_help_menu(page: int, is_assistant: bool):
-    start = page * PLUGINS_PER_PAGE
-    end = start + PLUGINS_PER_PAGE
-    current_plugins = plugins[start:end]
+    for cmd in cmd_page:
+        buttons.append([InlineKeyboardButton(cmd, callback_data=f'help_{cmd}')])
 
-    # Inline buttons for plugins
-    buttons = [
-        [InlineKeyboardButton(f"✧ {plugin} ✧", callback_data=f"plugin:{plugin[:64]}")]
-        for plugin in current_plugins
-    ]
+    # Add pagination buttons (if there are multiple pages)
+    prev_page = InlineKeyboardButton("Previous", callback_data=f'help_prev_{page_number-1}' if page_number > 0 else 'help_prev_0')
+    next_page = InlineKeyboardButton("Next", callback_data=f'help_next_{page_number+1}' if end < len(cmd_menu) else 'help_next_0')
+    buttons.append([prev_page, next_page])
 
-    # If the user is the assistant, add an admin-only button
-    if is_assistant:
-        buttons.append([InlineKeyboardButton("⚙️ Admin Panel", callback_data="admin_panel")])
+    total_pages = (len(cmd_menu) + items_per_page - 1) // items_per_page  # Calculate total pages
+    return buttons, total_pages
 
-    # Navigation buttons
-    navigation_buttons = []
-    if page > 0:
-        navigation_buttons.append(InlineKeyboardButton("⬅ PREV", callback_data=f"navigate:{page - 1}"))
-    navigation_buttons.append(InlineKeyboardButton("❌ CLOSE", callback_data="close"))
-    if end < len(plugins):
-        navigation_buttons.append(InlineKeyboardButton("NEXT ➡", callback_data=f"navigate:{page + 1}"))
+async def help_template(user_mention, cmd_stats, page_stats):
+    no_of_commands, no_of_plugins = cmd_stats
+    current_page, total_pages = page_stats
 
-    if navigation_buttons:
-        buttons.append(navigation_buttons)
+    caption = f"""
+    **HellBot Help Menu 🍀**
+    _Hey {user_mention}, here are your commands:_
 
-    return InlineKeyboardMarkup(buttons)
+    Total Commands: {no_of_commands}
+    Total Plugins: {no_of_plugins}
+    
+    _Page {current_page}/{total_pages}_
 
+    Type `/help` to get more detailed command info.
+    """
 
-# Command handler for /help command
-@app.on_message(filters.command("help"))
+    return caption
+
+# Inline query handler
+@bot.on_inline_query(filters.regex(r"help_menu"))
 async def help_inline(_, query: InlineQuery):
-    total_plugins = len(plugins)
-    total_commands = total_plugins * COMMANDS_PER_PLUGIN
-    current_page = 0
-    max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
+    # Check if the user is authorized to access the help menu
+    if not query.from_user.id in AUTH_USERS:
+        return
 
-    header = (
-        f"👻 Help Menu for: {message.from_user.mention or 'User'}\n"
-        f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
-        f"📄 Page: {current_page + 1}/{max_pages}"
+    # Count the number of plugins and commands available
+    no_of_plugins = len(CMD_MENU)
+    no_of_commands = len(CMD_INFO)
+
+    # Generate the inline help buttons and determine the number of pages
+    buttons, pages = await gen_inline_help_buttons(0, sorted(CMD_MENU))
+
+    # Prepare the help caption with a dynamic response
+    caption = await help_template(
+        query.from_user.mention, (no_of_commands, no_of_plugins), (1, pages)
     )
 
-    is_assistant = message.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
-
-    # Send the help message with inline keyboard
-    await message.reply(
-        text=header,
-        reply_markup=generate_help_menu(current_page, is_assistant)
+    # Answer the inline query with the formatted results and inline keyboard
+    await query.answer(
+        results=[
+            InlineQueryResultArticle(
+                title="HellBot Help Menu 🍀",  # Title displayed in the inline result
+                input_message_content=InputTextMessageContent(
+                    caption,  # Content to send in the chat
+                    disable_web_page_preview=True,
+                ),
+                description="Inline Query for Help Menu of HellBot",  # Description displayed in the inline query preview
+                reply_markup=InlineKeyboardMarkup(buttons),  # Inline keyboard with buttons for navigation
+            )
+        ],
+        cache_time=0,  # Set to 0 for dynamic updates, increase for caching
     )
-
-
-# Inline query handler for the /help command
-@app.on_inline_query()
-async def inline_help(client, inline_query):
-    total_plugins = len(plugins)
-    total_commands = total_plugins * COMMANDS_PER_PLUGIN
-    current_page = 0
-    max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
-
-    header = (
-        f"👻 Help Menu for: {inline_query.from_user.mention or 'User'}\n"
-        f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
-        f"📄 Page: {current_page + 1}/{max_pages}"
-    )
-
-    is_assistant = inline_query.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
-
-    # Create inline query result (message content and inline keyboard)
-    result = InlineQueryResultArticle(
-        title="Help Menu",
-        description="Click to explore available plugins.",
-        input_message_content=InputTextMessageContent(header),
-        reply_markup=generate_help_menu(current_page, is_assistant)
-    )
-
-    # Answer inline query with the result
-    await inline_query.answer([result], cache_time=0)
-
-
-# Handler for navigating between pages
-@app.on_callback_query(filters.regex(r"^navigate:(\d+)"))
-async def navigate_handler(client, callback_query):
-    page = int(callback_query.data.split(":")[1])
-    total_plugins = len(plugins)
-    max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
-
-    header = (
-        f"👻 Help Menu for: {callback_query.from_user.mention or 'User'}\n"
-        f"📜 Loaded {total_plugins} plugins with a total of {total_plugins * COMMANDS_PER_PLUGIN} commands.\n"
-        f"📄 Page: {page + 1}/{max_pages}"
-    )
-
-    is_assistant = callback_query.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
-    await callback_query.message.edit_text(
-        text=header,
-        reply_markup=generate_help_menu(page, is_assistant)
-    )
-
-
-# Handler for the close button
-@app.on_callback_query(filters.regex(r"^close"))
-async def close_handler(client, callback_query):
-    await callback_query.message.delete()
-
-
-# Handler for plugin details
-@app.on_callback_query(filters.regex(r"^plugin:(.+)"))
-async def plugin_details_handler(client, callback_query):
-    plugin_name = callback_query.data.split(":")[1]
-    await callback_query.message.edit_text(
-        f"Plugin Name: {plugin_name}\n"
-        f"Description: This plugin does amazing things!\n"
-        f"Commands Available: 1\n",
-        reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔙 Back to Menu", callback_data="navigate:0")]
-        ])
-    )
-
-
-# Handler for the admin panel button (only for assistant)
-@app.on_callback_query(filters.regex(r"^admin_panel"))
-async def admin_panel_handler(client, callback_query):
-    if callback_query.from_user.id == ASSISTANT_ID:
-        await callback_query.message.edit_text(
-            "Welcome to the Admin Panel! Here you can manage advanced settings.",
-            reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔙 Back to Menu", callback_data="navigate:0")]
-            ])
-        )
-    else:
-        await callback_query.answer("You are not authorized to access the admin panel.", show_alert=True)
