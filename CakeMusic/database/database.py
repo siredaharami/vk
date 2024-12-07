@@ -8,7 +8,7 @@ from motor import motor_asyncio
 from motor.core import AgnosticClient
 
 from config import Symbols
-from .__main__. import LOGGER
+from .LOGGER import LOGGER
 
 
 class Database:
