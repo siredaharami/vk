@@ -103,7 +103,7 @@ async def navigate_handler(client, callback_query):
     )
 
     is_assistant = callback_query.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
-await callback_query.message.edit_text(
+    await callback_query.message.edit_text(
         text=header,
         reply_markup=generate_help_menu(page, is_assistant)
     )
