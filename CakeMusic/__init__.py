@@ -27,6 +27,7 @@ app = Client(
     plugins=dict(root="CakeMusic.plugins.User")  # Plugins shared with bot
 )
 
+HELP_DICT = {}
 
 # Command filters for bot and app
 def cdx(commands: Union[str, List[str]]):
