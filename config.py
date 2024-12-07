@@ -40,7 +40,7 @@ class Symbols:
 #pbx
 
 
-
+class Config:
 HANDLERS = getenv("HANDLERS", ". ! ?").strip().split()
 # Global config: do not edit
     BOT_CMD_INFO = {}
