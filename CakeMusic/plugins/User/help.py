@@ -35,7 +35,7 @@ def generate_help_menu(page: int):
 
 
 # Command handler for /help command
-@app.on_message(filters.command("help"))
+@bot.on_message(filters.command("help"))
 async def help_command(client, message):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
