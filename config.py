@@ -40,6 +40,15 @@ class Symbols:
 
 #pbx
 
+# Global config: do not edit
+    BOT_CMD_INFO = {}
+    BOT_CMD_MENU = {}
+    BOT_HELP = {}
+    CMD_INFO = {}
+    CMD_MENU = {}
+    HELP_DICT = {}
+    TEMPLATES = {}
+
 class ENV:
     """Database ENV Names"""
 
