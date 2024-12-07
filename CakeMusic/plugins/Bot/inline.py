@@ -9,12 +9,11 @@ from pyrogram.types import (
 from CakeMusic.database.templates import help_template
 from CakeMusic.plugins.btnsG import gen_inline_help_buttons
 from CakeMusic import bot
-from config import AUTH_USERS
 
 
 @bot.on_inline_query(filters.regex(r"help_menu"))
 async def help_inline(_, query: InlineQuery):
-    if query.from_user.id not in AUTH_USERS:
+    if query.from_user.id not in OWNER_ID:
         return
     # Generate buttons and calculate the number of pages
     buttons, pages = await gen_inline_help_buttons(0, [])
