@@ -1,5 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
+from pyrogram.errors import Exception
 from CakeMusic import *
 
 # Inline query handler with an inline wrapper
@@ -41,4 +42,16 @@ async def help_callback(client, callback_query):
         await callback_query.message.edit_text("Here are the help details you requested.")
     except Exception as e:
         print(f"Error occurred during callback query: {e}")
-        
+
+# Regular help command handler (when user types /help)
+@app.on_message(filters.command("help"))
+async def help_command(client, message):
+    # Create an inline button for help
+    button = InlineKeyboardButton("Click here for help", callback_data="help")
+    
+    # Send a message with the button
+    await message.reply(
+        "Click below for help:",
+        reply_markup=InlineKeyboardMarkup([[button]])
+    )
+    
