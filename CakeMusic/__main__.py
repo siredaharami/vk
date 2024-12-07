@@ -85,7 +85,9 @@ async def start_clients():
         sys.exit()
 
 
-async def send_startup_messages(version: dict) -> None:
+async def main():
+    version = "1.0.0"  # Example version
+    await send_startup_messages(version)
     """Send startup messages to the log group if applicable."""
     if LOG_GROUP_ID != 0:
         try:
