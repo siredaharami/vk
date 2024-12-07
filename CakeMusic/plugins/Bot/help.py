@@ -4,8 +4,8 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from CakeMusic import app, bot, plugs
 from CakeMusic.version import __version__
-from CakeMusic.modules.helpers.buttons import paginate_plugins
-from CakeMusic.modules.helpers.wrapper import cb_wrapper
+from CakeMusic.modules.buttons import paginate_plugins
+from CakeMusic.modules..wrapper import cb_wrapper
 
 
 @app.on_message(filters.command("help"))
