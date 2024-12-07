@@ -18,6 +18,8 @@ OWNER_ID = int(getenv("OWNER_ID", "7009601543"))
 LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-1002356967761"))
 START_IMAGE_URL = getenv("START_IMAGE_URL", "https://files.catbox.moe/6v7esb.jpg")
 
+# dont edit this code 
+PLUGINS = {}
 
 class Symbols:
     anchor = "✰"
