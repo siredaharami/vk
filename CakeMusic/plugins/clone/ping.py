@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 import time
-from CakeMusic import *
+from CakeMusic.plugins.Bot.clone import client as app
 
 @app.on_message(filters.command("ping", prefixes=".") & filters.me)
 async def ping(client, message):
@@ -9,4 +9,3 @@ async def ping(client, message):
     end_time = time.time()
     ping_time = (end_time - start_time) * 1000  # Convert to milliseconds
     await response.edit_text(f"🏓 Pong! `{ping_time:.2f}ms`")
-
