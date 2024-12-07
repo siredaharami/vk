@@ -88,7 +88,7 @@ async def send_startup_messages(version: dict):
         try:
             await bot.send_animation(
                 config.LOG_GROUP_ID,
-                "https://files.catbox.moe/n99xm6.jpg",
+                "https://files.catbox.moe/zvwx1y.mp4",
                 f"**✅ Userbot is Online!**\n\n"
                 f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
                 f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
