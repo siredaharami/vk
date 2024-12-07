@@ -1,6 +1,6 @@
-from pyrogram import Client, filters
-from CakeMusic import *
+from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from CakeMusic import *  # Importing `bot` from YukkiMusic
 
 # Simulated plugin list and commands count
 plugins = [f"Plugin {i}" for i in range(1, 219)]  # 218 plugins example
@@ -85,4 +85,4 @@ async def plugin_details_handler(client, callback_query: CallbackQuery):
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="navigate:0")]
         ])
-  )
+    )
