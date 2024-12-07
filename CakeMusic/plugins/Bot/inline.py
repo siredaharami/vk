@@ -14,7 +14,7 @@ from CakeMusic import bot
 from config import *
 
 
-@Client.on_inline_query(filters.regex(r"help_menu"))
+@bot.on_inline_query(filters.regex(r"help_menu"))
 async def help_inline(_, query: InlineQuery):
     if not query.from_user.id in config.AUTH_USERS:
         return
