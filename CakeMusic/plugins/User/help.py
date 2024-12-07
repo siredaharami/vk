@@ -1,6 +1,12 @@
 from pyrogram import filters
+from pyrogram.types import (
+    InlineKeyboardMarkup,
+    InlineQuery,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+)
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
-from YukkiMusic import app  # Importing app from YukkiMusic
+from CakeMusic import app  # Importing app from YukkiMusic
 
 # Define your plugin and other constants
 plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
@@ -36,7 +42,7 @@ def generate_help_menu(page: int):
 
 # Command handler for /help command
 @bot.on_message(filters.command("help"))
-async def help_command(client, message):
+async def help_inline(_, query: InlineQuery):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
     current_page = 0
