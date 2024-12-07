@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
-
+from CakeMusic import *
 
 # Command Handler for /help (this is for the userbot command)
 @bot.on_message(filters.command("help") & filters.private)
