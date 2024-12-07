@@ -17,7 +17,7 @@ from config import *
 async def help_inline(_, query: InlineQuery):
     if not query.from_user.id in config.AUTH_USERS:
         return
-    buttons, pages = await gen_inline_help_buttons(0, sorted(Config.CMD_MENU))
+    buttons, pages = await gen_inline_help_buttons(0, sorted)
     caption = await help_template(
         query.from_user.mention, (no_of_commands, no_of_plugins), (1, pages)
     )
