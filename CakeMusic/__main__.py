@@ -85,7 +85,7 @@ async def start_clients():
         sys.exit()
 
 
-async def send_startup_messages():
+async def start_message(version: dict) -> None:
     """Send startup messages to the log group if applicable."""
     if LOG_GROUP_ID != 0:
         try:
