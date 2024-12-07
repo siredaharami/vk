@@ -1,11 +1,10 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from CakeMusic import *  # Importing `app` from YukkiMusic
+from YukkiMusic import app  # Importing `app` from YukkiMusic
 
-# Simulated plugin list and commands count
-plugins = [f"Plugin {i}" for i in range(1, 219)]  # 218 plugins example
-COMMANDS_PER_PLUGIN = 1  # For simplicity, assume 1 command per plugin
-PLUGINS_PER_PAGE = 52  # Max plugins per page
+plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugin list (20 plugins)
+COMMANDS_PER_PLUGIN = 1  # 1 command per plugin
+PLUGINS_PER_PAGE = 4  # Plugins per page (Reduced to 4)
 
 
 # Function to generate help menu buttons
@@ -16,7 +15,7 @@ def generate_help_menu(page: int):
 
     # Inline buttons for plugins
     buttons = [
-        [InlineKeyboardButton(f"✧ {plugin} ✧", callback_data=f"plugin:{plugin}")]
+        [InlineKeyboardButton(f"✧ {plugin} ✧", callback_data=f"plugin:{plugin[:64]}")]
         for plugin in current_plugins
     ]
 
@@ -31,13 +30,10 @@ def generate_help_menu(page: int):
     if navigation_buttons:
         buttons.append(navigation_buttons)
 
-    # Add fallback to prevent crashes
-    if not buttons:
-        buttons.append([InlineKeyboardButton("No plugins available", callback_data="noop")])
-
     return InlineKeyboardMarkup(buttons)
 
 
+# Help menu command handler
 @app.on_message(filters.command("help"))
 async def help_menu(client, message):
     total_plugins = len(plugins)
@@ -46,7 +42,7 @@ async def help_menu(client, message):
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
-        f"👻 **Help Menu for:** {message.from_user.mention}\n"
+        f"👻 **Help Menu for:** {message.from_user.mention or 'User'}\n"
         f"📜 **Loaded {total_plugins} plugins** with a total of **{total_commands} commands.**\n"
         f"📄 **Page:** {current_page + 1}/{max_pages}"
     )
@@ -54,37 +50,39 @@ async def help_menu(client, message):
     # Generate buttons
     buttons = generate_help_menu(current_page)
 
-    # Send the message with inline buttons
-    await message.reply(
-        header,
+    await message.reply_text(
+        text=header,
         reply_markup=buttons
     )
 
 
-@bot.on_callback_query(filters.regex(r"^navigate:(\d+)"))
+# Navigation callback handler
+@app.on_callback_query(filters.regex(r"^navigate:(\d+)"))
 async def navigate_handler(client, callback_query: CallbackQuery):
     page = int(callback_query.data.split(":")[1])
     total_plugins = len(plugins)
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
-        f"👻 **Help Menu for:** {callback_query.from_user.mention}\n"
+        f"👻 **Help Menu for:** {callback_query.from_user.mention or 'User'}\n"
         f"📜 **Loaded {total_plugins} plugins** with a total of **{total_plugins * COMMANDS_PER_PLUGIN} commands.**\n"
         f"📄 **Page:** {page + 1}/{max_pages}"
     )
 
     await callback_query.message.edit_text(
-        header,
+        text=header,
         reply_markup=generate_help_menu(page)
     )
 
 
-@bot.on_callback_query(filters.regex(r"^close"))
+# Close button callback handler
+@app.on_callback_query(filters.regex(r"^close"))
 async def close_handler(client, callback_query: CallbackQuery):
     await callback_query.message.delete()
 
 
-@bot.on_callback_query(filters.regex(r"^plugin:(.+)"))
+# Plugin details callback handler
+@app.on_callback_query(filters.regex(r"^plugin:(.+)"))
 async def plugin_details_handler(client, callback_query: CallbackQuery):
     plugin_name = callback_query.data.split(":")[1]
     await callback_query.message.edit_text(
