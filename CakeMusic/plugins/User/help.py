@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
-from pyrogram.errors import Exception
 from CakeMusic import *
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
+
 
 # Inline query handler with an inline wrapper
 async def inline_wrapper(func):
@@ -54,4 +54,3 @@ async def help_command(client, message):
         "Click below for help:",
         reply_markup=InlineKeyboardMarkup([[button]])
     )
-    
