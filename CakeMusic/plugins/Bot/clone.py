@@ -18,12 +18,12 @@ async def clone(bot: Client, msg: Message):
         reply_msg = await msg.reply("Please wait... Setting up the session. 💌")
         
         # Initialize the client with the provided session string
-        client = Client(
+        app = Client(
             name="ClonedClient",
             api_id=API_ID,
             api_hash=API_HASH,
             session_string=string_session,
-            plugins=dict(root="CakeMusic/plugins")
+            plugins=dict(root="CakeMusic/plugins.User")
         )
         
         # Start the client and fetch user details
