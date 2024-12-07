@@ -5,7 +5,7 @@ from CakeMusic import *
 
 
 # Inline query handler to respond to inline queries with a button
-@app.on_inline_query()
+@bot.on_inline_query()
 async def inline_query_handler(client, inline_query):
     if inline_query.query == "help":  # When user types "help" in inline query
         button = InlineKeyboardButton("Click here for help", callback_data="help")
@@ -19,7 +19,7 @@ async def inline_query_handler(client, inline_query):
         await client.answer_inline_query(inline_query.id, [result])
 
 # Handler for the button click (callback data is "help")
-@app.on_callback_query(filters.regex("help"))
+@bot.on_callback_query(filters.regex("help"))
 async def help_callback(client, callback_query):
     try:
         await callback_query.answer("Here are the help details you requested.")
@@ -28,7 +28,7 @@ async def help_callback(client, callback_query):
         print(f"Error during callback query: {e}")
 
 # Regular help command handler
-@app.on_message(filters.command("help"))
+@bot.on_message(filters.command("help"))
 async def help_command(client, message):
     # Create an inline button for help
     button = InlineKeyboardButton("Click here for help", callback_data="help")
