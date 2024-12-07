@@ -1,6 +1,6 @@
 import asyncio
-from BADMUNDA.modules.buttons import *
-from BADMUNDA.modules.wrapper import *
+from CakeMusic.modules.buttons import *
+from CakeMusic.modules.wrapper import *
 from pyrogram.types import *
 
 
