@@ -7,7 +7,7 @@ from config import MONGO_DB_URL
 from motor import motor_asyncio
 from motor.core import AgnosticClient
 
-from config import Config, Symbols
+from config import Symbols
 from .__main__ import LOGGER
 
 
