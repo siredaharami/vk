@@ -1,8 +1,7 @@
 from pyrogram import Client, filters
 import time
-from CakeMusic.plugins.Bot.clone import client as app
 
-@app.on_message(filters.command("ping", prefixes=".") & filters.me)
+@Client.on_message(filters.command("ping", prefixes=".") & filters.me)
 async def ping(client, message):
     start_time = time.time()
     response = await message.reply_text("Pinging...")
