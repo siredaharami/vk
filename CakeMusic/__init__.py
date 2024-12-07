@@ -29,6 +29,8 @@ app = Client(
 )
 
 HELP_DICT = {}
+CMD_INFO = {}
+CMD_MENU = {}
 HANDLERS = getenv("HANDLERS", ".")
 
 # Command filters for bot and app
