@@ -43,7 +43,6 @@ class Symbols:
 class Config:
     HANDLERS = getenv("HANDLERS", ".")
     
-# Global config: do not edit
     BOT_CMD_INFO = {}
     BOT_CMD_MENU = {}
     BOT_HELP = {}
