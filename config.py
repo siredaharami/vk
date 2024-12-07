@@ -49,7 +49,7 @@ class Config:
     BOT_HELP = {}
     CMD_INFO = {}
     CMD_MENU = {}
-    HELP_DICT = {}
+    SUKH_DICT = {}
     TEMPLATES = {}
 
 class ENV:
