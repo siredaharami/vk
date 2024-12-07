@@ -7,34 +7,32 @@ from CakeMusic.version import __version__
 from CakeMusic.modules.buttons import paginate_plugins
 from CakeMusic.modules.wrapper import cb_wrapper
 
-@app.on_message(filters.command("help"))
+
+
+@app.on_message(filters.command("help") & filters.private)
 async def inline_help_menu(client, message):
-    image = False  # Define the `image` variable. Set to `True` if needed.
-    
+    # Define the `image` variable if needed for conditional inline menu
+    image = False
+
     try:
+        # Fetch inline bot results based on the presence of `image`
         bot_results = await app.get_inline_bot_results(
             f"@{bot.me.username}", 
             "help_menu_logo" if image else "help_menu_text"
         )
+        # Send the inline bot result to the user
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
             query_id=bot_results.query_id,
             result_id=bot_results.results[0].id,
         )
-    except Exception:
-        bot_results = await app.get_inline_bot_results(
-            f"@{bot.me.username}", "help_menu_text"
-        )
-        await app.send_inline_bot_result(
-            chat_id=message.chat.id,
-            query_id=bot_results.query_id,
-            result_id=bot_results.results[0].id,
-        )
+    except Exception as e:
+        print(f"Error in inline_help_menu: {e}")
     finally:
         try:
             await message.delete()
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Failed to delete the message: {e}")
 
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
@@ -50,6 +48,7 @@ PBX Userbot » {__version__} ✨
 🌹 Powered by ☆ [PBX Update](https://t.me/HEROKUBIN_01) 🌹**
 """
 
+    # Handle different callback queries
     if match := re.match(r"help_plugin(.+?)", data):
         plugin = match.group(1)
         text = f"""
@@ -94,4 +93,4 @@ PBX Userbot » {__version__} ✨
                 paginate_plugins(0, plugs, "help")
             ),
             disable_web_page_preview=True,
-  )
+        )
