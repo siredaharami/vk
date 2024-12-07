@@ -1,64 +1,148 @@
-import logging
 from pyrogram import filters
-from pyrogram.types import InlineQuery, InlineQueryResultArticle, InputTextMessageContent
-from CakeMusic import app, bot  # Import the app and bot from YukkiMusic
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
+from CakeMusic import app, bot  # Importing app from YukkiMusic
+from pyrogram.types import (
+    InlineKeyboardMarkup,
+    InlineQuery,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+)
+ASSISTANT_ID =  6331052940  # Replace with the actual Telegram ID of your assistant
+plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
+COMMANDS_PER_PLUGIN = 1  # 1 command per plugin
+PLUGINS_PER_PAGE = 4  # Only 4 plugins per page
 
-# Initialize logging
-logging.basicConfig(level=logging.INFO)
 
-# Use the app initialized in YukkiMusic
-# We will continue using this 'app' object to handle the bot's functionality.
+# Function to generate inline buttons for help menu
+def generate_help_menu(page: int, is_assistant: bool):
+    start = page * PLUGINS_PER_PAGE
+    end = start + PLUGINS_PER_PAGE
+    current_plugins = plugins[start:end]
 
-# /help command handler
+    # Inline buttons for plugins
+    buttons = [
+        [InlineKeyboardButton(f"✧ {plugin} ✧", callback_data=f"plugin:{plugin[:64]}")]
+        for plugin in current_plugins
+    ]
+
+    # If the user is the assistant, add an admin-only button
+    if is_assistant:
+        buttons.append([InlineKeyboardButton("⚙️ Admin Panel", callback_data="admin_panel")])
+
+    # Navigation buttons
+    navigation_buttons = []
+    if page > 0:
+        navigation_buttons.append(InlineKeyboardButton("⬅ PREV", callback_data=f"navigate:{page - 1}"))
+    navigation_buttons.append(InlineKeyboardButton("❌ CLOSE", callback_data="close"))
+    if end < len(plugins):
+        navigation_buttons.append(InlineKeyboardButton("NEXT ➡", callback_data=f"navigate:{page + 1}"))
+
+    if navigation_buttons:
+        buttons.append(navigation_buttons)
+
+    return InlineKeyboardMarkup(buttons)
+
+
+# Command handler for /help command
 @app.on_message(filters.command("help"))
-async def help_command(client, message):
-    help_text = (
-        "Here are the available commands:\n"
-        "/help - Display this help message\n"
-        "/command1 - Description for command1\n"
-        "/command2 - Description for command2\n"
-        # Add more commands here
+async def help_inline(_, query: InlineQuery):
+    total_plugins = len(plugins)
+    total_commands = total_plugins * COMMANDS_PER_PLUGIN
+    current_page = 0
+    max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
+
+    header = (
+        f"👻 Help Menu for: {message.from_user.mention or 'User'}\n"
+        f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
+        f"📄 Page: {current_page + 1}/{max_pages}"
     )
-    await message.reply(help_text)
 
-# Inline query handler
+    is_assistant = message.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
+
+    # Send the help message with inline keyboard
+    await message.reply(
+        text=header,
+        reply_markup=generate_help_menu(current_page, is_assistant)
+    )
+
+
+# Inline query handler for the /help command
 @app.on_inline_query()
-async def inline_query_handler(client, inline_query: InlineQuery):
-    query = inline_query.query.lower()
+async def inline_help(client, inline_query):
+    total_plugins = len(plugins)
+    total_commands = total_plugins * COMMANDS_PER_PLUGIN
+    current_page = 0
+    max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
-    # Define a list of available plugins and commands for the inline query
-    plugins_and_commands = [
-        ("Plugin1", "Description of Plugin1"),
-        ("Plugin2", "Description of Plugin2"),
-        ("Plugin3", "Description of Plugin3"),
-        ("Plugin4", "Description of Plugin4"),
-        ("Command1", "Description of Command1"),
-        ("Command2", "Description of Command2"),
-        ("Command3", "Description of Command3"),
-        ("Command4", "Description of Command4"),
-    ]
+    header = (
+        f"👻 Help Menu for: {inline_query.from_user.mention or 'User'}\n"
+        f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
+        f"📄 Page: {current_page + 1}/{max_pages}"
+    )
 
-    # Generate results based on the query
-    results = [
-        InlineQueryResultArticle(
-            title=title,
-            input_message_content=InputTextMessageContent(f"{description}"))
-        for title, description in plugins_and_commands
-        if query in title.lower()  # Filter by query
-    ]
+    is_assistant = inline_query.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
 
-    # Send results
-    await inline_query.answer(results, cache_time=0)
+    # Create inline query result (message content and inline keyboard)
+    result = InlineQueryResultArticle(
+        title="Help Menu",
+        description="Click to explore available plugins.",
+        input_message_content=InputTextMessageContent(header),
+        reply_markup=generate_help_menu(current_page, is_assistant)
+    )
 
-# Plugin loading mechanism (dynamically load plugins)
-def load_plugins():
-    # Assuming you have a "plugins" directory where each plugin is a Python file
-    import os
-    plugin_dir = "./CakeMusic/plugins/User"
-    for filename in os.listdir(plugin_dir):
-        if filename.endswith(".py"):
-            module_name = filename[:-3]
-            __import__(f"plugins.{module_name}")
+    # Answer inline query with the result
+    await inline_query.answer([result], cache_time=0)
 
-# Load plugins
-load_plugins()
+
+# Handler for navigating between pages
+@app.on_callback_query(filters.regex(r"^navigate:(\d+)"))
+async def navigate_handler(client, callback_query):
+    page = int(callback_query.data.split(":")[1])
+    total_plugins = len(plugins)
+    max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
+
+    header = (
+        f"👻 Help Menu for: {callback_query.from_user.mention or 'User'}\n"
+        f"📜 Loaded {total_plugins} plugins with a total of {total_plugins * COMMANDS_PER_PLUGIN} commands.\n"
+        f"📄 Page: {page + 1}/{max_pages}"
+    )
+
+    is_assistant = callback_query.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
+    await callback_query.message.edit_text(
+        text=header,
+        reply_markup=generate_help_menu(page, is_assistant)
+    )
+
+
+# Handler for the close button
+@app.on_callback_query(filters.regex(r"^close"))
+async def close_handler(client, callback_query):
+    await callback_query.message.delete()
+
+
+# Handler for plugin details
+@app.on_callback_query(filters.regex(r"^plugin:(.+)"))
+async def plugin_details_handler(client, callback_query):
+    plugin_name = callback_query.data.split(":")[1]
+    await callback_query.message.edit_text(
+        f"Plugin Name: {plugin_name}\n"
+        f"Description: This plugin does amazing things!\n"
+        f"Commands Available: 1\n",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="navigate:0")]
+        ])
+    )
+
+
+# Handler for the admin panel button (only for assistant)
+@app.on_callback_query(filters.regex(r"^admin_panel"))
+async def admin_panel_handler(client, callback_query):
+    if callback_query.from_user.id == ASSISTANT_ID:
+        await callback_query.message.edit_text(
+            "Welcome to the Admin Panel! Here you can manage advanced settings.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🔙 Back to Menu", callback_data="navigate:0")]
+            ])
+        )
+    else:
+        await callback_query.answer("You are not authorized to access the admin panel.", show_alert=True)
