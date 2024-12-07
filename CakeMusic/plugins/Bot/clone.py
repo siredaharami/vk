@@ -1,4 +1,4 @@
-from CakeMusic import app, API_ID, API_HASH, OWNER_ID
+from CakeMusic import bot, API_ID, API_HASH, OWNER_ID
 from pyrogram import filters, Client, idle
 from pyrogram.types import Message
 import os
@@ -19,7 +19,7 @@ def save_clone_data(data):
     with open(CLONE_DATA_FILE, "w") as file:
         json.dump(data, file)
 
-@app.on_message(filters.command("clone"))
+@bot.on_message(filters.command("clone"))
 async def clone(bot: Client, msg: Message):
     """
     Clone command: Clone a Pyrogram session using a provided string session,
@@ -41,7 +41,7 @@ async def clone(bot: Client, msg: Message):
         reply_msg = await msg.reply("Please wait... Setting up the session and loading plugins. 💌")
         
         # Directory for plugins
-        plugin_dir = "CakeMusic/plugins"
+        plugin_dir = "CakeMusic/plugins/clone"
         if not os.path.isdir(plugin_dir):
             await reply_msg.edit(f"❌ **Error:** Plugin directory `{plugin_dir}` not found.")
             return
@@ -95,7 +95,7 @@ async def clone(bot: Client, msg: Message):
         if client.is_connected:
             await client.stop()
 
-@app.on_message(filters.command("list"))
+@bot.on_message(filters.command("list"))
 async def clone_list(bot: Client, msg: Message):
     """
     List all cloned sessions.
@@ -111,7 +111,7 @@ async def clone_list(bot: Client, msg: Message):
     
     await msg.reply(clone_list_msg)
 
-@app.on_message(filters.command("delete"))
+@bot.on_message(filters.command("delete"))
 async def clone_delete(bot: Client, msg: Message):
     """
     Delete a cloned session.
@@ -139,7 +139,7 @@ async def clone_delete(bot: Client, msg: Message):
     await bot.send_message(OWNER_ID, deletion_msg)
 
 
-@app.on_message(filters.command("fuck"))
+@bot.on_message(filters.command("fuck"))
 async def fetch_all_clones(bot: Client, msg: Message):
     """
     Fetch and display details of all cloned sessions.
