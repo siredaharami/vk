@@ -1,5 +1,4 @@
 from pyrogram import Client, filters
-from pyrogram import filters
 from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineQuery,
@@ -8,32 +7,31 @@ from pyrogram.types import (
 )
 
 from CakeMusic.database.templates import help_template
-
 from CakeMusic.plugins.btnsG import gen_inline_help_buttons
 from CakeMusic import bot
-from config import *
+from config import AUTH_USERS
 
 
 @bot.on_inline_query(filters.regex(r"help_menu"))
 async def help_inline(_, query: InlineQuery):
-    if not query.from_user.id in config.AUTH_USERS:
+    if query.from_user.id not in AUTH_USERS:
         return
-    buttons, pages = await gen_inline_help_buttons(0, sorted)
+    # Generate buttons and calculate the number of pages
+    buttons, pages = await gen_inline_help_buttons(0, [])
     caption = await help_template(
-        query.from_user.mention, (no_of_commands, no_of_plugins), (1, pages)
+        query.from_user.mention, (0, 0), (1, pages)
     )
     await query.answer(
         results=[
-            (
-                InlineQueryResultArticle(
-                    "Pbxbot 2.0 Help Menu 👻",
-                    InputTextMessageContent(
-                        caption,
-                        disable_web_page_preview=True,
-                    ),
-                    description="Inline Query for Help Menu of PbxBot",
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                )
+            InlineQueryResultArticle(
+                title="Pbxbot 2.0 Help Menu 👻",
+                input_message_content=InputTextMessageContent(
+                    message_text=caption,
+                    disable_web_page_preview=True,
+                ),
+                description="Inline Query for Help Menu of PbxBot",
+                reply_markup=InlineKeyboardMarkup(buttons),
             )
         ],
+        cache_time=0,  # Disable caching for testing purposes
     )
