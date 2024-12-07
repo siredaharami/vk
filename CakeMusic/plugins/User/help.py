@@ -5,7 +5,7 @@ from pyrogram.types import (
     InlineQueryResultArticle,
     InputTextMessageContent,
 )
-from pyrogram.types import Message
+
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
 from CakeMusic import *  # Importing app from YukkiMusic
 
@@ -50,12 +50,13 @@ async def help_inline(_, query: InlineQuery):
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
+        f"👻 Help Menu for: {message.from_user.mention or 'User'}\n"
         f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
 
     # Send the help message with inline keyboard
-    await message: Message.reply(
+    await message.reply(
         text=header,
         reply_markup=generate_help_menu(current_page)
     )
@@ -70,6 +71,7 @@ async def inline_help(client, inline_query):
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
+        f"👻 Help Menu for: {inline_query.from_user.mention or 'User'}\n"
         f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
@@ -94,6 +96,7 @@ async def navigate_handler(client, callback_query):
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
+        f"👻 Help Menu for: {callback_query.from_user.mention or 'User'}\n"
         f"📜 Loaded {total_plugins} plugins with a total of {total_plugins * COMMANDS_PER_PLUGIN} commands.\n"
         f"📄 Page: {page + 1}/{max_pages}"
     )
