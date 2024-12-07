@@ -18,15 +18,14 @@ from git.exc import GitCommandError, InvalidGitRepositoryError
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_async_
 
 from pyrogram import Client, filters as pyrofl
-from pytgcalls import PyTgCalls
-from pytgcalls.types import Update, GroupCall
-from pytgcalls.exceptions import GroupCallNotFoundError, NoActiveGroupCall
+from pytgcalls import PyTgCalls, filters as pytgfl
 
 from pyrogram import idle, __version__ as pyro_version
 from platform import python_version
 from pytgcalls.__version__ import __version__ as pytgcalls_version
 from pyrogram import __version__ as pyrogram_version
 
+from ntgcalls import TelegramServerError
 from pyrogram.enums import ChatMemberStatus, ChatType
 from pyrogram.errors import (
     ChatAdminRequired,
@@ -35,7 +34,10 @@ from pyrogram.errors import (
     UserAlreadyParticipant,
     UserNotParticipant,
 )
+from pytgcalls.exceptions import NoActiveGroupCall
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
+from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 
 from PIL import Image, ImageDraw, ImageEnhance
 from PIL import ImageFilter, ImageFont, ImageOps
@@ -44,7 +46,6 @@ from config import *
 
 loop = asyncio.get_event_loop()
 
-# Setup logging
 logging.basicConfig(
     format="[%(name)s]:: %(message)s",
     level=logging.INFO,
@@ -95,7 +96,7 @@ async def send_startup_messages(version: dict):
                     f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
                     f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
                     f"**🔹 Python ➠ ** `{version['python']}`\n"
-                    f"**🔹 PyTgCalls ➠ ** `{version['pytgcalls']}`"
+                    f"**🔹 Pytgcalls ➠ ** `{version['pytgcalls']}`"
                 ),
                 disable_notification=True,
                 reply_markup=InlineKeyboardMarkup(
@@ -122,7 +123,6 @@ async def send_startup_messages(version: dict):
         except Exception as e:
             LOGGER.warning(f"Could not send startup messages: {e}")
 
-
 async def main():
     LOGGER.info("🌐 Checking Required Variables ...")
     required_env_vars = [
@@ -148,7 +148,6 @@ async def main():
         "CakeMusic": version,
         "pyrogram": pyrogram_version,
         "python": python_version(),
-        "pytgcalls": pytgcalls_version,
     }
     await send_startup_messages(version_info)
 
@@ -156,9 +155,6 @@ async def main():
     try:
         await call.start()
         LOGGER.info("✅ PyTgCalls Started.")
-    except GroupCallNotFoundError:
-        LOGGER.error("🚫 No Active Group Call Found!")
-        sys.exit()
     except Exception as e:
         LOGGER.error(f"🚫 PyTgCalls Error: {e}")
         sys.exit()
