@@ -33,7 +33,7 @@ def generate_help_menu(page: int):
     return InlineKeyboardMarkup(buttons)
 
 
-@app.on_message(filters.command("help"))
+@bot.on_message(filters.command("help"))
 async def help_menu(client, message):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
