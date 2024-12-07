@@ -1,8 +1,8 @@
 from pyrogram.types import *
 from traceback import format_exc
 
-from YukkiMusic.misc import SUDOERS
-from YukkiMusic import app, bot
+from CakeMusic.misc import SUDOERS
+from CakeMusic import app, bot
 
 def super_user_only(mystic):
     async def wrapper(client, message):
@@ -36,7 +36,7 @@ def sudo_users_only(mystic):
 def cb_wrapper(func):
     async def wrapper(bot, cb):
         sudousers = SUDOERS
-        if (cb.from_user.id != app.me.id and
+        if (cb.from_user.id != bot.me.id and
             cb.from_user.id not in sudousers
         ):
             return await cb.answer(
@@ -60,7 +60,7 @@ def inline_wrapper(func):
     from ... import __version__
     async def wrapper(bot, query):
         sudousers = SUDOERS
-        if (query.from_user.id != app.me.id and
+        if (query.from_user.id != bot.me.id and
             query.from_user.id not in sudousers
         ):
             try:
