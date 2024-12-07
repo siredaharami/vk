@@ -2,7 +2,7 @@ import re
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from CakeMusic import __version__, app, bot, plugs
+from CakeMusic import app, bot, plugs
 from CakeMusic.version import __version__
 from CakeMusic.modules.helpers.buttons import paginate_plugins
 from CakeMusic.modules.helpers.wrapper import cb_wrapper
