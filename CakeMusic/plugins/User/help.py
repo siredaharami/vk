@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
-from CakeMusic import app  # Importing app from YukkiMusic
+from CakeMusic import *  # Importing app from YukkiMusic
 
 ASSISTANT_ID = 6331052940  # Replace with the actual Telegram ID of your assistant
 plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
@@ -39,7 +39,7 @@ def generate_help_menu(page: int, is_assistant: bool):
 
 
 # Inline query handler for the /help command
-@app.on_inline_query()
+@bot.on_inline_query()
 async def inline_help(client, inline_query):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
@@ -67,7 +67,7 @@ async def inline_help(client, inline_query):
 
 
 # Handler for navigating between pages
-@app.on_callback_query(filters.regex(r"^navigate:(\d+)"))
+@bot.on_callback_query(filters.regex(r"^navigate:(\d+)"))
 async def navigate_handler(client, callback_query):
     page = int(callback_query.data.split(":")[1])
     total_plugins = len(plugins)
@@ -88,13 +88,13 @@ async def navigate_handler(client, callback_query):
 
 
 # Handler for the close button
-@app.on_callback_query(filters.regex(r"^close"))
+@bot.on_callback_query(filters.regex(r"^close"))
 async def close_handler(client, callback_query):
     await callback_query.message.delete()
 
 
 # Handler for plugin details
-@app.on_callback_query(filters.regex(r"^plugin:(.+)"))
+@bot.on_callback_query(filters.regex(r"^plugin:(.+)"))
 async def plugin_details_handler(client, callback_query):
     plugin_name = callback_query.data.split(":")[1]
     await callback_query.message.edit_text(
@@ -108,7 +108,7 @@ async def plugin_details_handler(client, callback_query):
 
 
 # Handler for the admin panel button (only for assistant)
-@app.on_callback_query(filters.regex(r"^admin_panel"))
+@bot.on_callback_query(filters.regex(r"^admin_panel"))
 async def admin_panel_handler(client, callback_query):
     if callback_query.from_user.id == ASSISTANT_ID:
         await callback_query.message.edit_text(
