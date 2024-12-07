@@ -5,7 +5,7 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton
 from typing import Union, List
 
-from YukkiMusic import app
+from CakeMusic import bot
 
 
 class EqInlineKeyboardButton(InlineKeyboardButton):
@@ -77,7 +77,7 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
                 ),
                 EqInlineKeyboardButton(
                     "✯ ᴏᴡɴᴇʀ ✯",
-                    url=f"tg://openmessage?user_id={app.me.id}",
+                    url=f"tg://openmessage?user_id={bot.me.id}",
                 ),
                 EqInlineKeyboardButton(
                     "❯",
