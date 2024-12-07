@@ -84,7 +84,7 @@ async def send_startup_messages(version: dict):
         try:
             await bot.send_animation(
                 log_group_id,
-                "https://telegra.ph/file/48a4bb97b1b6e64184223.mp4",
+                "https://files.catbox.moe/zvwx1y.mp4",
                 f"**✅ Userbot is Online!**\n\n"
                 f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
                 f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
