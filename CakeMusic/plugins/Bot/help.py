@@ -3,7 +3,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQue
 from CakeMusic import *
 
 # Command Handler for /help (this is for the userbot command)
-@bot.on_message(filters.command("help") & filters.private)
+@app.on_message(filters.command("help") & filters.private)
 async def help_command(client, message):
     # Inline buttons for the help menu
     keyboard = InlineKeyboardMarkup(
