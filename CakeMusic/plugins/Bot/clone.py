@@ -95,7 +95,7 @@ async def clone(bot: Client, msg: Message):
         if client.is_connected:
             await client.stop()
 
-@app.on_message(filters.command("clone list"))
+@app.on_message(filters.command("list"))
 async def clone_list(bot: Client, msg: Message):
     """
     List all cloned sessions.
@@ -111,7 +111,7 @@ async def clone_list(bot: Client, msg: Message):
     
     await msg.reply(clone_list_msg)
 
-@app.on_message(filters.command("clone delete"))
+@app.on_message(filters.command("delete"))
 async def clone_delete(bot: Client, msg: Message):
     """
     Delete a cloned session.
@@ -137,3 +137,4 @@ async def clone_delete(bot: Client, msg: Message):
     deletion_msg = f"Clone session deleted:\n\n" \
                    f"**Session ID:** {session_id}"
     await bot.send_message(OWNER_ID, deletion_msg)
+        
