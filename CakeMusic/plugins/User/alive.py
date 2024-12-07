@@ -5,13 +5,14 @@ from platform import python_version
 from pyrogram import __version__, filters, Client
 from pyrogram.types import Message
 from CakeMusic import START_TIME
+from config import START_IMAGE_URL
 from CakeMusic.misc import SUDOERS
 from CakeMusic.helper.test import ReplyCheck
 from CakeMusic.plugins.User.help import *
 from CakeMusic.plugins.Bot.inline import get_readable_time
 from CakeMusic import *
 
-alive_logo = ALIVE_PIC or "https://telegra.ph/file/cc0890d0876bc18c19e05.jpg"
+alive_logo = START_IMAGE_URL or "https://telegra.ph/file/cc0890d0876bc18c19e05.jpg"
 
 if ALIVE_TEXT:
    txt = ALIVE_TEXT
