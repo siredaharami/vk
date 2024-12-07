@@ -83,18 +83,21 @@ async def start_clients():
 
 
 async def send_startup_messages(version: dict):
-    """Send startup messages to the log group if applicable."""
     if LOG_GROUP_ID != 0:
         try:
+            if not hasattr(bot, 'me') or not bot.me:
+                await bot.get_me()  # Ensure bot information is fetched
+
             await bot.send_animation(
                 config.LOG_GROUP_ID,
                 "https://files.catbox.moe/zvwx1y.mp4",
-                f"**✅ Userbot is Online!**\n\n"
-                f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
-                f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
-                f"**🔹 Python ➠ ** `{version['python']}`\n\n"
-                f"**🔹 Pytgcalls ➠ ** `{version['pytgcalls']}`\n\n"
-                f"**</> @ll_THE_BAD_BOT_ll**",
+                caption=(
+                    f"**✅ Userbot is Online!**\n\n"
+                    f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
+                    f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
+                    f"**🔹 Python ➠ ** `{version['python']}`\n"
+                    f"**🔹 Pytgcalls ➠ ** `{version['pytgcalls']}`"
+                ),
                 disable_notification=True,
                 reply_markup=InlineKeyboardMarkup(
                     [
@@ -119,7 +122,6 @@ async def send_startup_messages(version: dict):
             await app.send_message(LOG_GROUP_ID, "**🦋 Assistant Started.**")
         except Exception as e:
             LOGGER.warning(f"Could not send startup messages: {e}")
-
 
 async def main():
     LOGGER.info("🌐 Checking Required Variables ...")
