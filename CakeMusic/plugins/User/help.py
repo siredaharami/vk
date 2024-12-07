@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
-from CakeMusic import app  # Importing app from YukkiMusic
+from CakeMusic import bot  # Importing app from YukkiMusic
 
 ASSISTANT_ID =  6331052940  # Replace with the actual Telegram ID of your assistant
 plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
