@@ -50,7 +50,6 @@ async def help_inline(_, query: InlineQuery):
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
-        f"👻 Help Menu for: {message.from_user.mention or 'User'}\n"
         f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
@@ -71,7 +70,6 @@ async def inline_help(client, inline_query):
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
-        f"👻 Help Menu for: {inline_query.from_user.mention or 'User'}\n"
         f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
@@ -96,7 +94,6 @@ async def navigate_handler(client, callback_query):
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
-        f"👻 Help Menu for: {callback_query.from_user.mention or 'User'}\n"
         f"📜 Loaded {total_plugins} plugins with a total of {total_plugins * COMMANDS_PER_PLUGIN} commands.\n"
         f"📄 Page: {page + 1}/{max_pages}"
     )
