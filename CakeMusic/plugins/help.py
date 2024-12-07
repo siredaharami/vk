@@ -1,5 +1,5 @@
 #pbx
-from config import Config, Symbols
+from config import *
 
 
 class HelpMenu:
