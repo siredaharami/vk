@@ -5,7 +5,7 @@ from platform import python_version
 from pyrogram import __version__, filters, Client
 from pyrogram.types import Message
 from CakeMusic import START_TIME
-from config import START_IMAGE_URL
+from config import START_IMAGE_URL, ALIVE_TEXT
 from CakeMusic.misc import SUDOERS
 from CakeMusic.helper.test import ReplyCheck
 from CakeMusic.plugins.User.help import *
