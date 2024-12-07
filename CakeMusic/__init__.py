@@ -59,6 +59,9 @@ from .database.events import (
 )
 eor = edit_or_reply
 
+# Variables
+from CakeMusic.database import templates
+vars = templates
 
 # store start time
 __start_time__ = time.time()
