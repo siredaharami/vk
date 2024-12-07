@@ -42,14 +42,9 @@ class Symbols:
 
 class Config:
     HANDLERS = getenv("HANDLERS", ".")
-    
-    BOT_CMD_INFO = {}
-    BOT_CMD_MENU = {}
-    BOT_HELP = {}
     CMD_INFO = {}
     CMD_MENU = {}
-    SUKH_DICT = {}
-    TEMPLATES = {}
+    HELP_DICT = {}
 
 class ENV:
     """Database ENV Names"""
