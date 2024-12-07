@@ -2,7 +2,7 @@ import config
 import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
 import sys, time, textwrap
-from  CakeMusic import *
+from  CakeMusic import __version__ as version
 from CakeMusic  import app, bot, call
 from os import getenv
 from io import BytesIO
