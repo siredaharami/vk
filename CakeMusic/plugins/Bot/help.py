@@ -7,9 +7,10 @@ from CakeMusic.version import __version__
 from CakeMusic.modules.buttons import paginate_plugins
 from CakeMusic.modules.wrapper import cb_wrapper
 
-
-@bot.on_message(filters.command("help"))
+@app.on_message(filters.command("help"))
 async def inline_help_menu(client, message):
+    image = False  # Define the `image` variable. Set to `True` if needed.
+    
     try:
         bot_results = await app.get_inline_bot_results(
             f"@{bot.me.username}", 
