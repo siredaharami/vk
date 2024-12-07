@@ -1,6 +1,4 @@
-from config import *
-
-from CakeMusic import HELP_DICT
+from CakeMusic import *
 
 class HelpMenu:
     def __init__(self, file: str) -> None:
@@ -36,7 +34,7 @@ class HelpMenu:
         result += "\n\n"
         for command in self.command_dict:
             command = self.command_dict[command]
-            result += f"**{Symbols.radio_select} 𝖢𝗈𝗆𝗆𝖺𝗇𝖽:** `{HANDLERS[0]}{command['command']}"
+            result += f"**{Symbols.radio_select} 𝖢𝗈𝗆𝗆𝖺𝗇𝖽:** `{cdx[0]}{command['command']}"
             if command["parameters"]:
                 result += f" {command['parameters']}`\n"
             else:
@@ -46,7 +44,7 @@ class HelpMenu:
                     f"**{Symbols.arrow_right} 𝖣𝖾𝗌𝖼𝗋𝗂𝗉𝗍𝗂𝗈𝗇:** __{command['description']}__\n"
                 )
             if command["example"]:
-                result += f"**{Symbols.arrow_right} 𝖤𝗑𝖺𝗆𝗉𝗅𝖾:** `{HANDLERS[0]}{command['example']}`\n"
+                result += f"**{Symbols.arrow_right} 𝖤𝗑𝖺𝗆𝗉𝗅𝖾:** `{cdx[0]}{command['example']}`\n"
             if command["note"]:
                 result += f"**{Symbols.arrow_right} 𝖭𝗈𝗍𝖾:** __{command['note']}__\n"
 
