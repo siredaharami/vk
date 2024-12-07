@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from YukkiMusic import app  # Importing `app` from YukkiMusic
+from CakeMusic import app  # Importing `app` from YukkiMusic
 
 plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugin list (20 plugins)
 COMMANDS_PER_PLUGIN = 1  # 1 command per plugin
