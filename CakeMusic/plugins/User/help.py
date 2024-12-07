@@ -55,7 +55,7 @@ async def help_inline(_, query: InlineQuery):
     )
 
     # Send the help message with inline keyboard
-    await message.reply(
+    await message: Message.reply(
         text=header,
         reply_markup=generate_help_menu(current_page)
     )
