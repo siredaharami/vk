@@ -54,7 +54,7 @@ async def inline_query_handler(client, inline_query: InlineQuery):
 def load_plugins():
     # Assuming you have a "plugins" directory where each plugin is a Python file
     import os
-    plugin_dir = "./plugins"
+    plugin_dir = "./CakeMusic/plugins/User"
     for filename in os.listdir(plugin_dir):
         if filename.endswith(".py"):
             module_name = filename[:-3]
