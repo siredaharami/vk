@@ -11,21 +11,19 @@ from CakeMusic.modules.wrapper import cb_wrapper
 
 @app.on_message(filters.command("help") & filters.private)
 async def inline_help_menu(client, message):
-    # Define the `image` variable if needed for conditional inline menu
     image = False
-
     try:
-        # Fetch inline bot results based on the presence of `image`
         bot_results = await app.get_inline_bot_results(
-            f"@{bot.me.username}", 
-            "help_menu_logo" if image else "help_menu_text"
+            f"@{bot.me.username}",
+            "help_menu_logo" if image else "help_menu_text",
         )
-        # Send the inline bot result to the user
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
             query_id=bot_results.query_id,
             result_id=bot_results.results[0].id,
         )
+    except pyrogram.errors.BotResponseTimeout as e:
+        print(f"BOT_RESPONSE_TIMEOUT: {e}")
     except Exception as e:
         print(f"Error in inline_help_menu: {e}")
     finally:
@@ -93,4 +91,29 @@ PBX Userbot » {__version__} ✨
                 paginate_plugins(0, plugs, "help")
             ),
             disable_web_page_preview=True,
+        )
+
+@app.on_inline_query()
+async def inline_query_handler(client, query):
+    if query.query == "help_menu_logo":
+        await query.answer(
+            results=[
+                InlineQueryResultArticle(
+                    title="Help Menu Logo",
+                    description="Click to open the help menu with a logo.",
+                    input_message_content=InputTextMessageContent("Help Menu with Logo"),
+                )
+            ],
+            cache_time=10,
+        )
+    elif query.query == "help_menu_text":
+        await query.answer(
+            results=[
+                InlineQueryResultArticle(
+                    title="Help Menu Text",
+                    description="Click to open the help menu with text.",
+                    input_message_content=InputTextMessageContent("Help Menu with Text"),
+                )
+            ],
+            cache_time=10,
         )
