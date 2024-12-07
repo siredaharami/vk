@@ -95,7 +95,6 @@ async def send_startup_messages(version: dict):
                 f"**🔹 Python ➠ ** `{version['python']}`\n\n"
                 f"**🔹 Pytgcalls ➠ ** `{version['pytgcalls']}`\n"
                 f"**</> @ll_THE_BAD_BOT_ll**",
-                parse_mode="markdown",
                 disable_notification=True,
                 reply_markup=InlineKeyboardMarkup(
                     [
@@ -117,7 +116,7 @@ async def send_startup_messages(version: dict):
                     ]
                 ),
             )
-            await app.send_message(log_group_id, "**🦋 Assistant Started.**")
+            await app.send_message(log_group_id, "**🦋 userbot assistant Started.**")
         except Exception as e:
             LOGGER.warning(f"Could not send startup messages: {e}")
 
