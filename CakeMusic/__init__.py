@@ -7,15 +7,7 @@ from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 from pyrogram import Client, filters as pyrofl
 from config import *  # Ensure this file contains all required variables: API_ID, API_HASH, BOT_TOKEN, STRING_SESSION
 from pyrogram import idle, __version__ as pyro_version
-from platform import python_version
-from pytgcalls.__version__ import __version__ as pytgcalls_version
-from pyrogram import __version__ as pyrogram_version
 
-
-__version__ = {
-    "Baduserbot": "3.0",
-    "PyTgCalls": pytgcalls_version,
-}
 
 # Bot client configuration
 bot = Client(
