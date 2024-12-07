@@ -1,6 +1,5 @@
 #pbx
 from config import *
-from config import HELP_DICT
 
 class HelpMenu:
     def __init__(self, file: str) -> None:
@@ -63,7 +62,7 @@ class HelpMenu:
         return result
 
     def done(self) -> None:
-        HELP_DICT[self.filename] = {
+        SUKH_DICT[self.filename] = {
             "commands": self.command_dict,
             "info": self.command_info,
         }
