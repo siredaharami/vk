@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
 from CakeMusic import *  # Importing app from YukkiMusic
 
-ASSISTANT_ID =  6331052940  # Replace with the actual Telegram ID of your assistant
+ASSISTANT_ID = 6331052940  # Replace with the actual Telegram ID of your assistant
 plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
 COMMANDS_PER_PLUGIN = 1  # 1 command per plugin
 PLUGINS_PER_PAGE = 4  # Only 4 plugins per page
@@ -61,7 +61,7 @@ async def help_command(client, message):
     )
 
 
-# Inline query handler for the /help command
+# Inline query handler for the /help command (optional, only if you want inline results)
 @bot.on_inline_query()
 async def inline_help(client, inline_query):
     total_plugins = len(plugins)
