@@ -3,6 +3,7 @@ from config import OWNER_ID
 from CakeMusic import *
 
 
+
 @app.on_message(
     filters.command(["ping"], ".") & (filters.me | filters.user(OWNER_ID))
 )
@@ -16,3 +17,10 @@ async def ping(client, message):
     # Sending the message with the image
     await message.reply_photo(photo=image_path, caption=reply_text)
   
+__NAME__ = "ᴇᴍᴏᴊɪ"
+__MENU__ = """
+`.emoji` - **.emoji (name)**
+`.love` - **.cmoji (emoji or text) (name)**
+
+**Alternate Command:** '`whois`'
+"""
