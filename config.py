@@ -79,3 +79,10 @@ class ENV:
     unsplash_api = "UNSPLASH_API"
     usage_template = "USAGE_TEMPLATE"
     user_info_template = "USER_INFO_TEMPLATE"
+
+# users config: do not edit
+    AUTH_USERS = filters.user()
+
+all_env: list[str] = [
+    value for key, value in ENV.__dict__.items() if not key.startswith("__")
+]
