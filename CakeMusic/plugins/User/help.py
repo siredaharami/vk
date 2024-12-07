@@ -7,6 +7,8 @@ from pyrogram.types import (
     InlineQueryResultArticle,
     InputTextMessageContent,
 )
+from pyrogram.types import Message
+
 ASSISTANT_ID =  6331052940  # Replace with the actual Telegram ID of your assistant
 plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
 COMMANDS_PER_PLUGIN = 1  # 1 command per plugin
