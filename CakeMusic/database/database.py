@@ -2,7 +2,7 @@
 
 import datetime
 import time
-import config
+from config import MONGO_DB_URL
 
 from motor import motor_asyncio
 from motor.core import AgnosticClient
@@ -584,4 +584,4 @@ class Database:
         return data
 
 
-db = Database(config.MONGO_DB_URL)
+db = Database(MONGO_DB_URL)
