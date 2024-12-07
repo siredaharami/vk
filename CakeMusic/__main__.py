@@ -31,8 +31,12 @@ from pytgcalls import PyTgCalls, filters as pytgfl
 from pytgcalls.exceptions import NoActiveGroupCall
 from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
+
 from pyrogram import __version__ as pyrogram_version
-from pytgcalls.__version__ as pytgcalls_version
+from pyrogram import idle, __version__ as pyro_version
+from platform import python_version
+from pytgcalls.__version__ import __version__ as pytgcalls_version
+
 from PIL import Image, ImageDraw, ImageEnhance
 from PIL import ImageFilter, ImageFont, ImageOps
 from youtubesearchpython.__future__ import VideosSearch
