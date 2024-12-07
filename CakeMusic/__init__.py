@@ -1,3 +1,4 @@
+from os import getenv
 import sys, time, textwrap
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_async_
 from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
@@ -28,6 +29,7 @@ app = Client(
 )
 
 HELP_DICT = {}
+HANDLERS = getenv("HANDLERS", ".")
 
 # Command filters for bot and app
 def cdx(commands: Union[str, List[str]]):
