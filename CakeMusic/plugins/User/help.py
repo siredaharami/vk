@@ -5,6 +5,7 @@ from pyrogram.types import (
     InlineQueryResultArticle,
     InputTextMessageContent,
 )
+from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
 from CakeMusic import *  # Importing app from YukkiMusic
 
