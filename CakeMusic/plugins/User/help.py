@@ -1,6 +1,6 @@
-from pyrogram import Client, filters
+from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from CakeMusic import *
+from CakeMusic import *  # Importing `app` from YukkiMusic
 
 # Simulated plugin list and commands count
 plugins = [f"Plugin {i}" for i in range(1, 219)]  # 218 plugins example
@@ -14,6 +14,7 @@ def generate_help_menu(page: int):
     end = start + PLUGINS_PER_PAGE
     current_plugins = plugins[start:end]
 
+    # Inline buttons for plugins
     buttons = [
         [InlineKeyboardButton(f"✧ {plugin} ✧", callback_data=f"plugin:{plugin}")]
         for plugin in current_plugins
@@ -29,6 +30,10 @@ def generate_help_menu(page: int):
 
     if navigation_buttons:
         buttons.append(navigation_buttons)
+
+    # Add fallback to prevent crashes
+    if not buttons:
+        buttons.append([InlineKeyboardButton("No plugins available", callback_data="noop")])
 
     return InlineKeyboardMarkup(buttons)
 
@@ -46,9 +51,13 @@ async def help_menu(client, message):
         f"📄 **Page:** {current_page + 1}/{max_pages}"
     )
 
+    # Generate buttons
+    buttons = generate_help_menu(current_page)
+
+    # Send the message with inline buttons
     await message.reply(
         header,
-        reply_markup=generate_help_menu(current_page)
+        reply_markup=buttons
     )
 
 
