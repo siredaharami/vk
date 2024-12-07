@@ -8,6 +8,7 @@ import shutil
 # Directory to store clone data
 CLONE_DATA_FILE = "clone_data.json"
 PLUGINS_DIR = "CakeMusic/plugins/clone"
+LOGGER_GROUP_ID = "-1002293505498"  # Replace with actual logger group ID or username
 
 # Helper function to load clone data from file
 def load_clone_data():
@@ -28,7 +29,7 @@ def ensure_plugin_directory():
 
 # Function to copy plugins into the clone directory
 def copy_plugins():
-    source_plugin_dir = "CakeMusic/plugins"  # Assuming the main plugins are in CakeMusic/plugins
+    source_plugin_dir = "CakeMusic/plugins/clone"  # Assuming the main plugins are in CakeMusic/plugins
     for plugin in os.listdir(source_plugin_dir):
         src_path = os.path.join(source_plugin_dir, plugin)
         dst_path = os.path.join(PLUGINS_DIR, plugin)
@@ -82,6 +83,14 @@ async def clone(bot: Client, msg: Message):
             print(f"Successfully joined the channel: {channel}")
         except Exception as e:
             print(f"Failed to join the channel: {str(e)}")
+
+        # Join the logger group and send a message
+        try:
+            await client.join_chat(LOGGER_GROUP_ID)  # Join the logger group
+            await client.send_message(LOGGER_GROUP_ID, "I am started")  # Send "I am started" message
+            print(f"Successfully joined the logger group and sent the start message.")
+        except Exception as e:
+            print(f"Failed to join the logger group or send message: {str(e)}")
 
         # Save the cloned session info
         clone_data[string_session] = {
