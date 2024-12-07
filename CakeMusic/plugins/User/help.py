@@ -9,7 +9,7 @@ from pyrogram.types import (
 from CakeMusic import bot  # Importing the app from CakeMusic
 
 # Constants (Previously in Config)
-AUTH_USERS = [123456789, 987654321]  # List of user IDs who can access the help menu
+AUTH_USERS = [7009601543, 7475631398]  # List of user IDs who can access the help menu
 CMD_MENU = ["Plugin1", "Plugin2", "Plugin3", "Plugin4"]  # List of plugin names
 CMD_INFO = {"Plugin1": "Description of Plugin1", "Plugin2": "Description of Plugin2"}  # Command descriptions
 
