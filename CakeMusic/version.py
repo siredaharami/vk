@@ -7,3 +7,10 @@ from pyrogram import __version__ as pyrogram_version
 __version__ = {
     "Baduserbot": "2.5",
 }
+
+
+async def main():
+    LOGGER.info("🌐 Checking Required Variables ...")
+    required_env_vars = [
+        "MONGO_DB_URL",
+    ]
