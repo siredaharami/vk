@@ -18,7 +18,7 @@ from pyrogram.types import (
     Message,
 )
 
-from CakeMusic import CMD_HELP, StartTime, app, ਬੋਟ
+from CakeMusic import CMD_HELP, StartTime, app, bot
 from CakeMusic.helper.data import Data
 from CakeMusic.helper.inline import inline_wrapper, paginate_help
 
