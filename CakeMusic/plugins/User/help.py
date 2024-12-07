@@ -1,6 +1,9 @@
-from pyrogram import Client, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent
+from pyrogram import Client
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
 from pyrogram.errors import CallbackQueryError
+from CakeMusic import *
+
+
 
 # Inline query handler with an inline wrapper
 async def inline_wrapper(func):
@@ -41,4 +44,4 @@ async def help_callback(client, callback_query):
         await callback_query.message.edit_text("Here are the help details you requested.")
     except CallbackQueryError as e:
         print(f"Error occurred during callback query: {e}")
-          
+        
