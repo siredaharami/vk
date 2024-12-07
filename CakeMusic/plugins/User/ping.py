@@ -17,10 +17,15 @@ async def ping(client, message):
     # Sending the message with the image
     await message.reply_photo(photo=image_path, caption=reply_text)
   
-__NAME__ = "ᴇᴍᴏᴊɪ"
-__MENU__ = """
-`.emoji` - **.emoji (name)**
-`.love` - **.cmoji (emoji or text) (name)**
 
-**Alternate Command:** '`whois`'
-"""
+add_command_help(
+    "sudos",
+    [
+        [
+            "addsudo <reply/username/userid>",
+            "Add any user as Sudo (Use This At your own risk maybe sudo users can control ur account).",
+        ],
+        ["rmsudo <reply/username/userid>", "Remove Sudo access."],
+        ["sudolist", "Displays the Sudo List."],
+    ],
+)
