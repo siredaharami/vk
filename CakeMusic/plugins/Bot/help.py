@@ -8,7 +8,7 @@ from CakeMusic.modules.buttons import paginate_plugins
 from CakeMusic.modules.wrapper import cb_wrapper
 
 
-@app.on_message(filters.command("help"))
+@bot.on_message(filters.command("help"))
 async def inline_help_menu(client, message):
     try:
         bot_results = await app.get_inline_bot_results(
