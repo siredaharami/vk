@@ -28,10 +28,6 @@ app = Client(
     plugins=dict(root="CakeMusic.plugins.User")  # Plugins shared with bot
 )
 
-HELP_DICT = {}
-CMD_INFO = {}
-CMD_MENU = {}
-HANDLERS = getenv("HANDLERS", ".")
 
 # Command filters for bot and app
 def cdx(commands: Union[str, List[str]]):
@@ -63,9 +59,6 @@ from .database.events import (
 )
 eor = edit_or_reply
 
-# Variables
-from CakeMusic.database import templates
-vars = templates
 
 # store start time
 __start_time__ = time.time()
