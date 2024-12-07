@@ -583,4 +583,4 @@ class Database:
         return data
 
 
-db = Database(Config.MONGO_DB_URL
+db = Database(Config.MONGO_DB_URL)
