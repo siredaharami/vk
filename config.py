@@ -17,3 +17,20 @@ LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-1002356967761"))
 START_IMAGE_URL = getenv("START_IMAGE_URL", "https://files.catbox.moe/6v7esb.jpg")
 
 
+class Symbols:
+    anchor = "✰"
+    arrow_left = "↞"
+    arrow_right = "↠"
+    back = "☜ ʙᴀᴄᴋ"
+    bullet = "•"
+    check_mark = "✓"
+    close = "❌ 𝗖𝗟𝗢𝗦𝗘 ❌"
+    cross_mark = "✗"
+    diamond_1 = "◇"
+    diamond_2 = "◈"
+    next = "⤚ ɴᴇxᴛ"
+    previous = "ᴘʀᴇᴠ ⤙"
+    radio_select = "◉"
+    radio_unselect = "〇"
+    triangle_left = "◂"
+    triangle_right = "▸"
