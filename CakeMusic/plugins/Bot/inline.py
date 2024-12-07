@@ -6,7 +6,7 @@ from pyrogram.types import (
     InputTextMessageContent,
 )
 
-from CakeMusic.templates.templates import help_template
+from CakeMusic.database.templates.templates import help_template
 
 from CakeMusic.plugins.btnsG import gen_inline_help_buttons
 from CakeMusic import bot
