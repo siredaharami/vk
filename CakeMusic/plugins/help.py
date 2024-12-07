@@ -1,6 +1,6 @@
 #pbx
 from config import *
-
+from config import HELP_DICT
 
 class HelpMenu:
     def __init__(self, file: str) -> None:
