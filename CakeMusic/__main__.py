@@ -1,3 +1,4 @@
+import config
 import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
 import sys, time, textwrap
@@ -86,7 +87,7 @@ async def send_startup_messages():
     if LOG_GROUP_ID != 0:
         try:
             await bot.send_animation(
-                        Config.LOGGER_ID,
+                        config.LOG_GROUP_ID,
             "https://telegra.ph/file/48a4bb97b1b6e64184223.mp4",
             f"**{Symbols.check_mark} ᴜꜱᴇʀʙᴏᴛ ɪꜱ ɴᴏᴡ ᴏɴʟɪɴᴇ!**\n\n"
             f"**{Symbols.triangle_right}  2.0 ᴠᴇʀsɪᴏɴ ➠ ** `{version['Pbxbot']}`\n"
