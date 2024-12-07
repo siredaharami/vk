@@ -1,4 +1,3 @@
-from CakeMusic.plugins.User.help import *
 import glob
 from os.path import dirname, isfile
 from config import *
