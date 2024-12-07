@@ -107,7 +107,7 @@ async def clone_list(bot: Client, msg: Message):
     
     clone_list_msg = "Cloned sessions:\n\n"
     for session in clone_data.values():
-        clone_list_msg += f"**User:** {session['user_name']} | **User ID:** {session['user_id']} | **Session ID:** {session['session_id']}\n"
+        clone_list_msg += f"**User:** {session['user_name']} | **User ID:** {session['user_id']}\n"
     
     await msg.reply(clone_list_msg)
 
