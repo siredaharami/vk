@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
-from CakeMusic import bot  # Importing app from YukkiMusic
+from CakeMusic import *  # Importing app from YukkiMusic
 
 ASSISTANT_ID =  6331052940  # Replace with the actual Telegram ID of your assistant
 plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
@@ -39,7 +39,7 @@ def generate_help_menu(page: int, is_assistant: bool):
 
 
 # Command handler for /help command
-@bot.on_message(filters.command("help"))
+@app.on_message(filters.command("help"))
 async def help_command(client, message):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
