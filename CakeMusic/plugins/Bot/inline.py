@@ -11,7 +11,7 @@ from CakeMusic.plugins.btnsG import gen_inline_help_buttons
 from CakeMusic import bot
 
 
-@bot.on_inline_query(filters.regex(r"help_menu"))
+@on_inline_query(filters.regex(r"help_menu"))
 async def help_inline(_, query: InlineQuery):
     if query.from_user.id not in OWNER_ID:
         return
