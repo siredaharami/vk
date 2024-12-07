@@ -52,7 +52,7 @@ async def help_menu(client, message):
     )
 
 
-@app.on_callback_query(filters.regex(r"^navigate:(\d+)"))
+@bot.on_callback_query(filters.regex(r"^navigate:(\d+)"))
 async def navigate_handler(client, callback_query: CallbackQuery):
     page = int(callback_query.data.split(":")[1])
     total_plugins = len(plugins)
@@ -70,12 +70,12 @@ async def navigate_handler(client, callback_query: CallbackQuery):
     )
 
 
-@app.on_callback_query(filters.regex(r"^close"))
+@bot.on_callback_query(filters.regex(r"^close"))
 async def close_handler(client, callback_query: CallbackQuery):
     await callback_query.message.delete()
 
 
-@app.on_callback_query(filters.regex(r"^plugin:(.+)"))
+@bot.on_callback_query(filters.regex(r"^plugin:(.+)"))
 async def plugin_details_handler(client, callback_query: CallbackQuery):
     plugin_name = callback_query.data.split(":")[1]
     await callback_query.message.edit_text(
