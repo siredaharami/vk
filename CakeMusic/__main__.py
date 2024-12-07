@@ -1,4 +1,5 @@
 import config
+from CakeMusic.version import *
 import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
 import sys, time, textwrap
@@ -44,12 +45,6 @@ from PIL import Image, ImageDraw, ImageEnhance
 from PIL import ImageFilter, ImageFont, ImageOps
 from youtubesearchpython.__future__ import VideosSearch
 from config import *
-
-__version__ = {
-    "Baduserbot": "3.0",
-    "pyrogram": pyrogram_version,
-    "python": python_version(),
-}
 
 loop = asyncio.get_event_loop()
 
