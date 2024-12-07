@@ -6,7 +6,7 @@ from pyrogram.types import (
     InputTextMessageContent,
     InlineKeyboardButton
 )
-from CakeMusic import app  # Importing the app from CakeMusic
+from CakeMusic import bot  # Importing the app from CakeMusic
 
 # Constants (Previously in Config)
 AUTH_USERS = [123456789, 987654321]  # List of user IDs who can access the help menu
