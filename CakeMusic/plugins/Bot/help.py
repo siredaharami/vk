@@ -20,7 +20,7 @@ async def help_command(client, message):
         ]
     )
 
-    # Sending the Help message with inline keyboard
+    # Send a message to the userbot with inline buttons when '/help' is called
     await message.reply(
         "**👻 Help Menu:**\n"
         "📜 Loaded 52 plugins with a total of 218 commands.\n"
@@ -28,10 +28,16 @@ async def help_command(client, message):
         reply_markup=keyboard
     )
 
+    # Bot switches to inline mode
+    await message.reply(
+        "This is your inline mode response. Select the option below:",
+        reply_markup=keyboard  # Buttons to handle actions inline
+    )
+
 # Inline Query Handler for when the user interacts with the bot
 @bot.on_inline_query()
 async def inline_query_handler(client, query):
-    # Here we create an inline result to show when the user interacts with the bot inline.
+    # This part handles the inline query and returns an article with inline buttons
     results = [
         InlineQueryResultArticle(
             title="Help Menu",
@@ -76,4 +82,3 @@ async def callback_query_handler(client, callback_query):
         await callback_query.answer("Next page not implemented!")
     else:
         await callback_query.answer("Unknown action!")
-        
