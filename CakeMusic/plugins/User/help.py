@@ -1,6 +1,6 @@
-from pyrogram import filters
+from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from CakeMusic import *  # Importing `bot` from YukkiMusic
+from CakeMusic import *
 
 # Simulated plugin list and commands count
 plugins = [f"Plugin {i}" for i in range(1, 219)]  # 218 plugins example
@@ -22,8 +22,8 @@ def generate_help_menu(page: int):
     # Navigation buttons
     navigation_buttons = []
     if page > 0:
-        navigation_buttons.append(InlineKeyboardButton("PREV ⬅", callback_data=f"navigate:{page - 1}"))
-    navigation_buttons.append(InlineKeyboardButton("❌ CLOSE ❌", callback_data="close"))
+        navigation_buttons.append(InlineKeyboardButton("⬅ PREV", callback_data=f"navigate:{page - 1}"))
+    navigation_buttons.append(InlineKeyboardButton("❌ CLOSE", callback_data="close"))
     if end < len(plugins):
         navigation_buttons.append(InlineKeyboardButton("NEXT ➡", callback_data=f"navigate:{page + 1}"))
 
