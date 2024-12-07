@@ -1,30 +1,39 @@
 import asyncio
-from CakeMusic.modules.buttons import *
-from CakeMusic.modules.wrapper import *
-from pyrogram.types import *
+from pyrogram import Client
+from pyrogram.types import (
+    InlineQuery,
+    InlineQueryResultPhoto,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+    InlineKeyboardMarkup,
+)
+from CakeMusic.modules.buttons import paginate_plugins
+from CakeMusic.modules.wrapper import inline_wrapper
+
+# Initialize bot and required variables
+bot = Client("my_bot")  # Replace "my_bot" with your session name
+plugs = []  # Replace with your plugins list
+__version__ = "1.0.0"  # Replace with your bot's version
 
 
 async def help_menu_logo(answer):
-    image = None
-    if image:
-        thumb_image = image
-    else:
-        thumb_image = "https://telegra.ph/file/3063af27d9cc8580845e1.jpg"
+    thumb_image = "https://telegra.ph/file/3063af27d9cc8580845e1.jpg"
     button = paginate_plugins(0, plugs, "help")
     answer.append(
         InlineQueryResultPhoto(
-            photo_url=f"{thumb_image}",
-            title="💫 ʜᴇʟᴘ ᴍᴇɴᴜ  ✨",
-            thumb_url=f"{thumb_image}",
-            description=f"🥀 Open Help Menu Of PBXUSERBOT ✨...",
+            photo_url=thumb_image,
+            title="💫 ʜᴇʟᴘ ᴍᴇɴᴜ ✨",
+            thumb_url=thumb_image,
+            description="🥀 Open Help Menu Of PBXUSERBOT ✨...",
             caption=f"""
-            **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
+**💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
 ᴘʙx ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
- 
+
 ❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
 ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️
- 
-🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ☆  [ ᴘʙx ᴜᴘᴅᴀᴛᴇ ](https://t.me/HEROKUBIN_01) 🌹**""",
+
+🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ☆ [ᴘʙx ᴜᴘᴅᴀᴛᴇ](https://t.me/HEROKUBIN_01) 🌹**
+            """,
             reply_markup=InlineKeyboardMarkup(button),
         )
     )
@@ -32,20 +41,21 @@ async def help_menu_logo(answer):
 
 
 async def help_menu_text(answer):
-    from ... import __version__
     button = paginate_plugins(0, plugs, "help")
     answer.append(
         InlineQueryResultArticle(
-            title="💫 ʜᴇʟᴘ ᴍᴇɴᴜ  ✨",
-            input_message_content=InputTextMessageContent(f"""
-            **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
+            title="💫 ʜᴇʟᴘ ᴍᴇɴᴜ ✨",
+            input_message_content=InputTextMessageContent(
+                f"""
+**💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
 ᴘʙx ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
- 
+
 ❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
 ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️
- 
-🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ☆  [ ᴘʙx ᴜᴘᴅᴀᴛᴇ ](https://t.me/HEROKUBIN_01) 🌹**""",
-            disable_web_page_preview=True
+
+🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ☆ [ᴘʙx ᴜᴘᴅᴀᴛᴇ](https://t.me/HEROKUBIN_01) 🌹**
+                """,
+                disable_web_page_preview=True,
             ),
             reply_markup=InlineKeyboardMarkup(button),
         )
@@ -53,30 +63,18 @@ async def help_menu_text(answer):
     return answer
 
 
-async def run_async_inline():
-    @bot.on_inline_query()
-    @inline_wrapper
-    async def inline_query_handler(bot, query):
-        text = query.query
-        if text.startswith("help_menu_logo"):
-            answer = []
-            answer = await help_menu_logo(answer)
-            try:
-                await bot.answer_inline_query(
-                    query.id, results=answer, cache_time=10
-                )
-            except Exception as e:
-                print(str(e))
-                return
-        elif text.startswith("help_menu_text"):
-            answer = []
-            answer = await help_menu_text(answer)
-            try:
-                await bot.answer_inline_query(
-                    query.id, results=answer, cache_time=10
-                )
-            except Exception as e:
-                print(str(e))
-                return
-        else:
-            return
+@bot.on_inline_query()
+@inline_wrapper
+async def inline_query_handler(bot, query: InlineQuery):
+    text = query.query
+    answer = []
+    if text.startswith("help_menu_logo"):
+        answer = await help_menu_logo(answer)
+    elif text.startswith("help_menu_text"):
+        answer = await help_menu_text(answer)
+
+    if answer:
+        try:
+            await bot.answer_inline_query(query.id, results=answer, cache_time=10)
+        except Exception as e:
+            print(f"Error: {e}")
