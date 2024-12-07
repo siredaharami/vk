@@ -23,6 +23,7 @@ from pytgcalls import PyTgCalls, filters as pytgfl
 
 from pyrogram import idle, __version__ as pyro_version
 from pytgcalls.__version__ import __version__ as pytgcalls_version
+from pyrogram import __version__ as pyrogram_version
 
 from ntgcalls import TelegramServerError
 from pyrogram.enums import ChatMemberStatus, ChatType
@@ -42,6 +43,12 @@ from PIL import Image, ImageDraw, ImageEnhance
 from PIL import ImageFilter, ImageFont, ImageOps
 from youtubesearchpython.__future__ import VideosSearch
 from config import *
+
+__version__ = {
+    "Baduserbot": "3.0",
+    "pyrogram": pyrogram_version,
+    "python": python_version(),
+}
 
 loop = asyncio.get_event_loop()
 
