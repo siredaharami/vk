@@ -1,5 +1,5 @@
 from CakeMusic import bot, API_ID, API_HASH
-from pyrogram import filters, Client
+from pyrogram import filters, Client, idle
 from pyrogram.types import Message
 import os
 
@@ -45,9 +45,10 @@ async def clone(bot: Client, msg: Message):
             f"Enjoy using your cloned session. 💕"
         )
         await reply_msg.edit(success_msg)
-        
+
         # Keep the cloned client running
-        await client.idle()
+        print("Cloned session running. Press Ctrl+C to stop.")
+        await idle()
 
     except Exception as e:
         error_msg = f"❌ **ERROR:** `{str(e)}`\nPlease check your session string or plugins."
