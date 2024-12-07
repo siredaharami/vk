@@ -35,7 +35,7 @@ class HelpMenu:
         result += "\n\n"
         for command in self.command_dict:
             command = self.command_dict[command]
-            result += f"**{Symbols.radio_select} 𝖢𝗈𝗆𝗆𝖺𝗇𝖽:** `{config.HANDLERS[0]}{command['command']}"
+            result += f"**{Symbols.radio_select} 𝖢𝗈𝗆𝗆𝖺𝗇𝖽:** `{HANDLERS[0]}{command['command']}"
             if command["parameters"]:
                 result += f" {command['parameters']}`\n"
             else:
@@ -45,13 +45,13 @@ class HelpMenu:
                     f"**{Symbols.arrow_right} 𝖣𝖾𝗌𝖼𝗋𝗂𝗉𝗍𝗂𝗈𝗇:** __{command['description']}__\n"
                 )
             if command["example"]:
-                result += f"**{Symbols.arrow_right} 𝖤𝗑𝖺𝗆𝗉𝗅𝖾:** `{config.HANDLERS[0]}{command['example']}`\n"
+                result += f"**{Symbols.arrow_right} 𝖤𝗑𝖺𝗆𝗉𝗅𝖾:** `{HANDLERS[0]}{command['example']}`\n"
             if command["note"]:
                 result += f"**{Symbols.arrow_right} 𝖭𝗈𝗍𝖾:** __{command['note']}__\n"
 
             result += "\n"
 
-            config.CMD_INFO[command["command"]] = {
+            CMD_INFO[command["command"]] = {
                 "command": f"{command['command']} {command['parameters'] if command['parameters'] else ''}",
                 "description": command["description"],
                 "example": command["example"],
@@ -62,11 +62,11 @@ class HelpMenu:
         return result
 
     def done(self) -> None:
-        config.HELP_DICT[self.filename] = {
+        HELP_DICT[self.filename] = {
             "commands": self.command_dict,
             "info": self.command_info,
         }
-        config.CMD_MENU[self.filename] = self.get_menu()
+        CMD_MENU[self.filename] = self.get_menu()
 
 
 
