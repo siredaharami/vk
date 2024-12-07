@@ -55,7 +55,7 @@ mongodb = mongo_async_cli.adityaxdb
 
 
 #HELP
-
+ids = []
 CMD_HELP = {}
 
 
