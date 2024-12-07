@@ -93,6 +93,7 @@ async def send_startup_messages(version: dict):
                 f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
                 f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
                 f"**🔹 Python ➠ ** `{version['python']}`\n\n"
+                f"**🔹 Pytgcalls ➠ ** `{version['pytgcalls']}`\n\n"
                 f"**</> @ll_THE_BAD_BOT_ll**",
                 disable_notification=True,
                 reply_markup=InlineKeyboardMarkup(
