@@ -2,7 +2,7 @@ import asyncio
 from math import ceil
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union  # Added Union here
 
 from CakeMusic import bot
 
