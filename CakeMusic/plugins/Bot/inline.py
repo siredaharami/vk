@@ -19,7 +19,7 @@ from pyrogram.types import (
 )
 
 from CakeMusic import CMD_HELP, StartTime, app, bot
-from CakeMusic.helper.data import Data
+from CakeMusic.helper.test3 import Data
 from CakeMusic.helper.inline import inline_wrapper, paginate_help
 
 async def get_readable_time(seconds: int) -> str:
