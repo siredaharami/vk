@@ -2,8 +2,8 @@ import config
 import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
 import sys, time, textwrap
-from  CakeMusic import __version__ as version
-from CakeMusic  import app, bot, call
+from CakeMusic import __version__ as version
+from CakeMusic import app, bot, call
 from os import getenv
 from io import BytesIO
 from time import strftime
@@ -13,14 +13,12 @@ from datetime import datetime
 from typing import Union, List, Pattern
 from logging.handlers import RotatingFileHandler
 
-
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_async_
 
 from pyrogram import Client, filters as pyrofl
 from pytgcalls import PyTgCalls, filters as pytgfl
-
 
 from pyrogram import idle, __version__ as pyro_version
 from platform import python_version
@@ -58,7 +56,6 @@ logging.basicConfig(
     ],
 )
 
-
 logging.getLogger("apscheduler").setLevel(logging.ERROR)
 logging.getLogger("asyncio").setLevel(logging.ERROR)
 logging.getLogger("httpx").setLevel(logging.ERROR)
@@ -85,36 +82,39 @@ async def start_clients():
         sys.exit()
 
 
-async def main():
-    version = "1.0.0"  # Example version
-    await send_startup_messages(version)
+async def send_startup_messages(version: dict):
     """Send startup messages to the log group if applicable."""
     if LOG_GROUP_ID != 0:
         try:
             await bot.send_animation(
-                        config.LOG_GROUP_ID,
-            "https://telegra.ph/file/48a4bb97b1b6e64184223.mp4",
-            f"**{Symbols.check_mark} ᴜꜱᴇʀʙᴏᴛ ɪꜱ ɴᴏᴡ ᴏɴʟɪɴᴇ!**\n\n"
-            f"**{Symbols.triangle_right}  2.0 ᴠᴇʀsɪᴏɴ ➠ ** `{version['Pbxbot']}`\n"
-            f"**{Symbols.triangle_right}  ᴘʏʀᴏɢʀᴀᴍ ᴠᴇʀsɪᴏɴ ➠ ** `{version['pyrogram']}`\n"
-            f"**{Symbols.triangle_right}  ᴘʏᴛʜᴏɴ ᴠᴇʀsɪᴏɴ ➠ ** `{version['python']}`\n\n"
-            f"**</> @ll_THE_BAD_BOT_ll**",
-            parse_mode=ParseMode.MARKDOWN,
-            disable_notification=True,
-            reply_markup=InlineKeyboardMarkup(
-                [
+                config.LOG_GROUP_ID,
+                "https://telegra.ph/file/48a4bb97b1b6e64184223.mp4",
+                f"**✅ Userbot is Online!**\n\n"
+                f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
+                f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
+                f"**🔹 Python ➠ ** `{version['python']}`\n\n"
+                f"**</> @ll_THE_BAD_BOT_ll**",
+                parse_mode="markdown",
+                disable_notification=True,
+                reply_markup=InlineKeyboardMarkup(
                     [
-                        InlineKeyboardButton("💫 sᴛᴀʀᴛ ᴍᴇ", url=f"https://t.me/{bot.me.username}?start=start"),
-                        InlineKeyboardButton("💖 ʀᴇᴘᴏ", url="https://github.com/Badhacker98/PBX_2.0/fork"),
-                    ],
-                    [
-                        InlineKeyboardButton("⎯꯭̽🇨🇦꯭꯭ ⃪В꯭α꯭∂ ꯭м꯭υ꯭η∂꯭α_꯭آآ⎯꯭ ꯭̽🌸", url="https://t.me/ll_BAD_MUNDA_ll"),
-                    ],
-                    [
-                    InlineKeyboardButton("🦋 𝐏ʙx 𝐁ᴏᴛ 𝐒ᴜᴘᴘᴏʀᴛ ❤️", url="https://t.me/ll_THE_BAD_BOT_ll"),
-                    ],
-                ]
-            ),
+                        [
+                            InlineKeyboardButton(
+                                "💫 Start Me",
+                                url=f"https://t.me/{bot.me.username}?start=start",
+                            ),
+                            InlineKeyboardButton(
+                                "💖 Repo",
+                                url="https://github.com/Badhacker98/PBX_2.0/fork",
+                            ),
+                        ],
+                        [
+                            InlineKeyboardButton(
+                                "💬 Support", url="https://t.me/ll_THE_BAD_BOT_ll"
+                            )
+                        ],
+                    ]
+                ),
             )
             await app.send_message(LOG_GROUP_ID, "**🦋 Assistant Started.**")
         except Exception as e:
@@ -123,7 +123,13 @@ async def main():
 
 async def main():
     LOGGER.info("🌐 Checking Required Variables ...")
-    required_env_vars = ["API_ID", "API_HASH", "BOT_TOKEN", "STRING_SESSION", "MONGO_DB_URL"]
+    required_env_vars = [
+        "API_ID",
+        "API_HASH",
+        "BOT_TOKEN",
+        "STRING_SESSION",
+        "MONGO_DB_URL",
+    ]
     for var in required_env_vars:
         if not globals().get(var):
             LOGGER.error(f"❌ '{var}' - Not Found !!")
@@ -136,7 +142,12 @@ async def main():
     await start_clients()
 
     LOGGER.info("🌀 Sending Startup Messages ...")
-    await send_startup_messages()
+    version_info = {
+        "CakeMusic": version,
+        "pyrogram": pyrogram_version,
+        "python": python_version(),
+    }
+    await send_startup_messages(version_info)
 
     LOGGER.info("🌀 Starting PyTgCalls ...")
     try:
