@@ -6,7 +6,7 @@ from pyrogram.types import (
     InputTextMessageContent,
 )
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
-from CakeMusic import app  # Importing app from YukkiMusic
+from CakeMusic import *  # Importing app from YukkiMusic
 
 # Define your plugin and other constants
 plugins = [f"Plugin {i}" for i in range(1, 21)]  # Example: Simulated plugins
