@@ -1,7 +1,6 @@
 import glob
 from os.path import dirname, isfile
 from config import *
-from CakeMusic.plugins.help import HelpMenu
 
 def __list_all_modules():
     work_dir = dirname(__file__)
