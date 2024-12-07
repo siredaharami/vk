@@ -8,7 +8,7 @@ from pyrogram.types import (
 
 from CakeMusic.database.templates import help_template
 from CakeMusic.plugins.btnsG import gen_inline_help_buttons
-from CakeMusic import bot
+from CakeMusic import *
 
 
 @app_inline_query(filters.regex(r"help_menu"))
