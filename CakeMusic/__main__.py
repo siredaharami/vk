@@ -17,15 +17,7 @@ from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_async_
 
-from pyrogram import Client, filters as pyrofl
-from pytgcalls import PyTgCalls, filters as pytgfl
-
-from pyrogram import idle, __version__ as pyro_version
-from platform import python_version
-from pytgcalls.__version__ import __version__ as pytgcalls_version
-from pyrogram import __version__ as pyrogram_version
-
-from ntgcalls import TelegramServerError
+from pyrogram import Client, filters as pyrofl, idle
 from pyrogram.enums import ChatMemberStatus, ChatType
 from pyrogram.errors import (
     ChatAdminRequired,
@@ -34,18 +26,23 @@ from pyrogram.errors import (
     UserAlreadyParticipant,
     UserNotParticipant,
 )
-from pytgcalls.exceptions import NoActiveGroupCall
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pytgcalls import PyTgCalls, filters as pytgfl
+from pytgcalls.exceptions import NoActiveGroupCall
 from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
-
+from pyrogram.__version__ as pyrogram_version
+from pytgcalls.__version__ as pytgcalls_version
 from PIL import Image, ImageDraw, ImageEnhance
 from PIL import ImageFilter, ImageFont, ImageOps
 from youtubesearchpython.__future__ import VideosSearch
-from config import *
+
+# Load environment variables
+load_dotenv()
 
 loop = asyncio.get_event_loop()
 
+# Setup Logging
 logging.basicConfig(
     format="[%(name)s]:: %(message)s",
     level=logging.INFO,
@@ -56,11 +53,9 @@ logging.basicConfig(
     ],
 )
 
-logging.getLogger("apscheduler").setLevel(logging.ERROR)
-logging.getLogger("asyncio").setLevel(logging.ERROR)
-logging.getLogger("httpx").setLevel(logging.ERROR)
-logging.getLogger("pyrogram").setLevel(logging.ERROR)
-logging.getLogger("pytgcalls").setLevel(logging.ERROR)
+# Suppress noisy loggers
+for module in ["apscheduler", "asyncio", "httpx", "pyrogram", "pytgcalls"]:
+    logging.getLogger(module).setLevel(logging.ERROR)
 
 LOGGER = logging.getLogger("SYSTEM")
 
@@ -83,21 +78,20 @@ async def start_clients():
 
 
 async def send_startup_messages(version: dict):
-    if LOG_GROUP_ID != 0:
+    """Send startup messages to the log group if applicable."""
+    log_group_id = getattr(config, "LOG_GROUP_ID", 0)
+    if log_group_id != 0:
         try:
-            if not hasattr(bot, 'me') or not bot.me:
-                await bot.get_me()  # Ensure bot information is fetched
-
             await bot.send_animation(
-                config.LOG_GROUP_ID,
-                "https://files.catbox.moe/zvwx1y.mp4",
-                caption=(
-                    f"**✅ Userbot is Online!**\n\n"
-                    f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
-                    f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
-                    f"**🔹 Python ➠ ** `{version['python']}`\n"
-                    f"**🔹 Pytgcalls ➠ ** `{version['pytgcalls']}`"
-                ),
+                log_group_id,
+                "https://telegra.ph/file/48a4bb97b1b6e64184223.mp4",
+                f"**✅ Userbot is Online!**\n\n"
+                f"**🔹 Version ➠ ** `{version['CakeMusic']}`\n"
+                f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
+                f"**🔹 Python ➠ ** `{version['python']}`\n\n"
+                f"**🔹 Pytgcalls ➠ ** `{version['pytgcalls']}`\n"
+                f"**</> @ll_THE_BAD_BOT_ll**",
+                parse_mode="markdown",
                 disable_notification=True,
                 reply_markup=InlineKeyboardMarkup(
                     [
@@ -119,9 +113,10 @@ async def send_startup_messages(version: dict):
                     ]
                 ),
             )
-            await app.send_message(LOG_GROUP_ID, "**🦋 Assistant Started.**")
+            await app.send_message(log_group_id, "**🦋 Assistant Started.**")
         except Exception as e:
             LOGGER.warning(f"Could not send startup messages: {e}")
+
 
 async def main():
     LOGGER.info("🌐 Checking Required Variables ...")
@@ -132,10 +127,10 @@ async def main():
         "STRING_SESSION",
         "MONGO_DB_URL",
     ]
-    for var in required_env_vars:
-        if not globals().get(var):
-            LOGGER.error(f"❌ '{var}' - Not Found !!")
-            sys.exit()
+    missing_vars = [var for var in required_env_vars if not getenv(var)]
+    if missing_vars:
+        LOGGER.error(f"❌ Missing Environment Variables: {', '.join(missing_vars)}")
+        sys.exit()
 
     LOGGER.info("✅ Required Variables Collected.")
     await asyncio.sleep(1)
@@ -148,6 +143,7 @@ async def main():
         "CakeMusic": version,
         "pyrogram": pyrogram_version,
         "python": python_version(),
+        "pytgcalls": pytgcalls_version,
     }
     await send_startup_messages(version_info)
 
@@ -165,4 +161,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    loop.run_until_complete(main())
+    try:
+        loop.run_until_complete(main())
+    except KeyboardInterrupt:
+        LOGGER.info("💤 Shutting Down ...")
