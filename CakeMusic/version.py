@@ -11,6 +11,7 @@ __version__ = {
 }
 
 
+LOGGER = logging.getLogger("SYSTEM")
 async def main():
     LOGGER.info("🌐 Checking Required Variables ...")
     required_env_vars = [
