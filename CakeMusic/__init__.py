@@ -9,9 +9,7 @@ from config import *  # Ensure this file contains all required variables: API_ID
 
 
 # Bot client configuration
-bot = Client()
-def __init__(self) -> None:
-    self.bot: Client = Client(
+bot = Client(
     name="Bot",
     api_id=API_ID,
     api_hash=API_HASH,
