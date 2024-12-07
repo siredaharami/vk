@@ -1,4 +1,4 @@
-from config import Config, Symbols
+from config import Symbols
 
 
 class HelpMenu:
