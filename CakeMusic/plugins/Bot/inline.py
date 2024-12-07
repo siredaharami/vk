@@ -1,3 +1,4 @@
+from pyrogram import Client, filters
 from pyrogram import filters
 from pyrogram.types import (
     InlineKeyboardMarkup,
@@ -13,7 +14,7 @@ from CakeMusic import bot
 from config import *
 
 
-@bot.on_inline_query(filters.regex(r"help_menu"))
+@Client.on_inline_query(filters.regex(r"help_menu"))
 async def help_inline(_, query: InlineQuery):
     if not query.from_user.id in config.AUTH_USERS:
         return
