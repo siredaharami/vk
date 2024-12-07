@@ -1,5 +1,6 @@
 import asyncio
 from datetime import datetime
+from pyrogram import Client, filters
 from platform import python_version
 
 from pyrogram import __version__, filters, Client
@@ -29,7 +30,7 @@ else:
     )
 
 @app.on_message(
-    filters.command(["alive", "awake"], ".") & (filters.me | filters.user(SUDOERS))
+    filters.command(["a"], ".") & (filters.me | filters.user(OWNER_ID))
 )
 async def alive(app: app, message: Message):
     xx = await message.reply_text("⚡️")
