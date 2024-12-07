@@ -94,7 +94,6 @@ async def send_startup_messages(version: dict):
                 f"**🔹 Pyrogram ➠ ** `{version['pyrogram']}`\n"
                 f"**🔹 Python ➠ ** `{version['python']}`\n\n"
                 f"**</> @ll_THE_BAD_BOT_ll**",
-                parse_mode="markdown",
                 disable_notification=True,
                 reply_markup=InlineKeyboardMarkup(
                     [
