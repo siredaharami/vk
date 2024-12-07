@@ -85,7 +85,7 @@ async def send_startup_messages():
     """Send startup messages to the log group if applicable."""
     if LOG_GROUP_ID != 0:
         try:
-            await self.bot.send_animation(
+            await bot.send_animation(
                         Config.LOGGER_ID,
             "https://telegra.ph/file/48a4bb97b1b6e64184223.mp4",
             f"**{Symbols.check_mark} ᴜꜱᴇʀʙᴏᴛ ɪꜱ ɴᴏᴡ ᴏɴʟɪɴᴇ!**\n\n"
@@ -98,7 +98,7 @@ async def send_startup_messages():
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton("💫 sᴛᴀʀᴛ ᴍᴇ", url=f"https://t.me/{self.bot.me.username}?start=start"),
+                        InlineKeyboardButton("💫 sᴛᴀʀᴛ ᴍᴇ", url=f"https://t.me/{bot.me.username}?start=start"),
                         InlineKeyboardButton("💖 ʀᴇᴘᴏ", url="https://github.com/Badhacker98/PBX_2.0/fork"),
                     ],
                     [
