@@ -8,7 +8,7 @@ from motor import motor_asyncio
 from motor.core import AgnosticClient
 
 from config import Symbols
-import .LOGGER
+from CakeMusic.version import LOGGER
 
 
 class Database:
