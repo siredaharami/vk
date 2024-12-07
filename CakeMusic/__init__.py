@@ -9,6 +9,12 @@ from pyrogram import Client, filters as pyrofl
 from config import *  # Ensure this file contains all required variables: API_ID, API_HASH, BOT_TOKEN, STRING_SESSION
 from pyrogram import idle, __version__ as pyro_version
 
+#test
+from datetime import datetime
+import time
+
+StartTime = time.time()
+START_TIME = datetime.now()
 
 # Bot client configuration
 bot = Client(
