@@ -41,7 +41,7 @@ async def inline_help_menu(client, message):
             try:
                 await message.delete()
             except Exception:
-            pass
+                pass
 
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
