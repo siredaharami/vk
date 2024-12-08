@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 from asyncio import sleep
 from pyrogram.errors import RPCError, BotResponseTimeout
 
-@app.on_message(filters.command("help1"))
+@bot.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
     """
     Sends an inline help menu to the user based on the availability of an image or text.
