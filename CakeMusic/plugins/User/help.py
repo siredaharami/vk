@@ -1,4 +1,10 @@
 from pyrogram import filters
+from pyrogram.types import (
+    InlineKeyboardMarkup,
+    InlineQuery,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+)
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
 from CakeMusic import *  # Ensure CakeMusic is configured correctly
 from pyrogram.types import Message, InlineQuery
