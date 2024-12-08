@@ -45,7 +45,7 @@ def create_carbonara_paste(text: str) -> str:
         return f"Error while creating paste: {str(e)}"
 
 # Command to show help (list of available plugins with Carbonara link)
-@app.on_message(filters.command("help"))
+@app.on_message(filters.command("help1"))
 async def help(client: Client, message: Message):
     if plugin_details:
         # Custom help text
