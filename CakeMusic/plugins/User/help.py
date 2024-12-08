@@ -6,8 +6,7 @@ from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import *
 from CakeMusic.sukh.inline import *
 from CakeMusic.sukh.wrapper import *
-
-from pyrogram.errors import UsernameNotFound, BotResponseTimeout, PeerIdInvalid, RPCError
+from pyrogram.errors import RPCError, FloodWait
 import logging
 
 # Set up logging
@@ -15,30 +14,24 @@ logging.basicConfig(level=logging.INFO)
 
 async def inline_help_menu(app, query):
     try:
-        # Wrap the code that causes the error in try-except block
+        # Attempt to get inline results
         bot_results = await app.get_inline_bot_results(query)
-        # Handle successful bot results here
         return bot_results
-    except UsernameNotFound as e:
-        # Handle case when username is not found
-        logging.error(f"Username not found: {e}")
-        return "Sorry, the username you are looking for is not available."
-    except BotResponseTimeout as e:
-        # Handle bot response timeout
-        logging.error(f"Bot response timed out: {e}")
-        return "The bot took too long to respond, please try again later."
-    except PeerIdInvalid as e:
-        # Handle invalid peer ID
-        logging.error(f"Invalid peer ID: {e}")
-        return "The peer ID provided is invalid."
+    except FloodWait as e:
+        # Handle rate-limiting errors
+        logging.error(f"Flood wait error: {e}")
+        return f"Please wait for {e.x} seconds before trying again."
     except RPCError as e:
-        # Handle any other RPC errors
+        # Handle general RPC errors
         logging.error(f"RPC error occurred: {e}")
         return "An error occurred while communicating with the Telegram servers. Please try again."
     except Exception as e:
-        # Catch any other unexpected exceptions
+        # Handle any unexpected errors
         logging.error(f"Unexpected error: {e}")
         return "An unexpected error occurred. Please try again."
+
+# Example usage:
+# bot_results = await inline_help_menu(app, query)
 
 # Now you can call the inline_help_menu function
 # Example usage
