@@ -7,37 +7,39 @@ from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import paginate_plugins
 from CakeMusic.sukh.wrapper import cb_wrapper, sudo_users_only
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
+
+from asyncio import sleep
 
 @app.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
-    """
-    Sends an inline help menu to the user based on the availability of an image or text.
-    """
-    image = False  # Set to True if you want to fetch "help_menu_logo" instead of "help_menu_text"
-    try:
-        query = "help_menu_logo" if image else "help_menu_text"
-        bot_results = await app.get_inline_bot_results(f"@{bot.me.username}", query)
-        await app.send_inline_bot_result(
-            chat_id=message.chat.id,
-            query_id=bot_results.query_id,
-            result_id=bot_results.results[0].id,
-        )
-    except Exception as e:
-        print(f"Error fetching inline results: {e}")
-        # Retry with default "help_menu_text" if the first attempt fails
+    retries = 3
+    for attempt in range(retries):
         try:
-            bot_results = await app.get_inline_bot_results(
-                f"@{bot.me.username}", "help_menu_text"
-            )
+            query = "help_menu_logo" if False else "help_menu_text"
+            bot_results = await app.get_inline_bot_results(f"@{bot.me.username}", query)
             await app.send_inline_bot_result(
                 chat_id=message.chat.id,
                 query_id=bot_results.query_id,
                 result_id=bot_results.results[0].id,
             )
-        except Exception as retry_error:
-            print(f"Retry failed: {retry_error}")
+            break  # Exit loop if successful
+        except RPCError as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt + 1 < retries:
+                await sleep(2)  # Wait before retrying
+            else:
+                await message.reply_text(
+                    "🚨 Couldn't fetch inline results after multiple attempts. Please try again later."
+                )
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            break
+
     finally:
-        # Delete the original command message if possible
         try:
             await message.delete()
         except Exception:
