@@ -114,6 +114,4 @@ Powered by [Updates](https://t.me/SHIVANSH474) 🌹
             disable_web_page_preview=True,
         )
 
-
-# Run the bot
-app.run()
+l
