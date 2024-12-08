@@ -57,7 +57,7 @@ async def inline_help_menu(client, message):
         )
     except Exception:
         bot_results = await app.get_inline_bot_results(
-            f"@{bot.me.username}", "help_menu_text"
+            f"@TEST_BOT_NEW_MUSIC_Bot", "help_menu_text"
         )
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
