@@ -9,9 +9,6 @@ from CakeMusic.sukh.inline import *
 from CakeMusic.sukh.wrapper import *
 
 
-# Initialize the client correctly (app vs bot)
-app = Client("userbot")  # Replace with your actual app client initialization
-
 # Command handler for help2
 @app.on_message(filters.command("help2"))
 async def inline_help_menu(client, message):
