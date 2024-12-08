@@ -7,11 +7,19 @@ from CakeMusic import app, bot, plugs
 from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import paginate_plugins
 from CakeMusic.sukh.wrapper import cb_wrapper, sudo_users_only
+from asyncio import sleep
+from pyrogram.errors import RPCError, BotResponseTimeout
+
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-from asyncio import sleep
-from pyrogram.errors import RPCError, BotResponseTimeout
+import time
+
+start_time = time.time()
+bot_results = await app.get_inline_bot_results(f"@{bot.me.username}", query)
+end_time = time.time()
+print(f"Inline query processing time: {end_time - start_time} seconds")
+
 
 @bot.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
