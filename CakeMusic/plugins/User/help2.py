@@ -17,35 +17,39 @@ def plugin(name, description):
 def create_carbonara_paste(text: str) -> str:
     url = "https://carbonara.solopov.dev/api/cook"
     
-    # Payload for Carbonara API (removed 'height' and kept other relevant parameters)
+    # Payload for Carbonara API
     payload = {
         "code": text,
-        "theme": "seti",  # Example theme, you can change it
-        "width": 1000,     # Optional, adjust as needed
+        "theme": "seti",  # Example theme
+        "width": 1000,    # Optional
     }
     
     try:
         # Send request to Carbonara API
         response = requests.post(url, json=payload)
         
-        # Check if the request was successful
-        if response.status_code == 200:
+        # Log the response for debugging
+        if response.status_code != 200:
+            return f"Error: {response.status_code} - {response.text}"  # Log the error response
+        
+        # Ensure response contains valid JSON
+        try:
             data = response.json()
-            if "url" in data:
-                return data["url"]  # Return the image URL
-            else:
-                return "Error: No URL in the response."
+        except ValueError:
+            return "Error: Invalid JSON response from the server."
+
+        # Return the URL if present
+        if "url" in data:
+            return data["url"]
         else:
-            # If response status is not 200, show error with response details
-            return f"Error: {response.status_code} - {response.text}"
-    except Exception as e:
+            return "Error: No URL in the response."
+    except requests.RequestException as e:
         return f"Error while creating paste: {str(e)}"
 
 # Command to show help (list of available plugins with Carbonara link)
 @app.on_message(filters.command("help1"))
 async def help(client: Client, message: Message):
     if plugin_details:
-        # Custom help text
         help_text = f"""
 📚 Help Menu 📚
 Below is a list of all available plugins you can use. There are a total of {len(plugin_details)} plugins.
@@ -56,7 +60,7 @@ Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
         plugin_list = list(plugin_details.keys())
         rows = [plugin_list[i:i + 10] for i in range(0, len(plugin_list), 10)]
 
-        plugin_number_map = {}  # Map plugin number to name
+        plugin_number_map = {}
         plugin_count = 1
 
         for idx, row in enumerate(rows, start=1):
@@ -79,36 +83,3 @@ Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
             await message.reply(f"Here is the Help Menu: {carbonara_url}")
     else:
         await message.reply("No plugins added yet.")
-
-# Command to show plugin details by number
-@app.on_message(filters.command("plugin_details"))
-async def plugin_details_command(client: Client, message: Message):
-    if len(message.command) < 2:
-        await message.reply("Please provide the plugin number.")
-        return
-    
-    try:
-        plugin_number = int(message.command[1])  # Get the plugin number
-    except ValueError:
-        await message.reply("Invalid plugin number. Please provide a valid number.")
-        return
-    
-    if plugin_number_map_global.get(plugin_number):
-        plugin_name = plugin_number_map_global[plugin_number]
-        await message.reply(plugin_details[plugin_name])
-    else:
-        await message.reply(f"No details found for plugin number '{plugin_number}'.")
-
-# Example plugins added using the @plugin decorator
-@app.on_message(filters.command("example"))
-@plugin(
-    name="example",
-    description="""
-**Example Plugin**
-- **Command**: /example
-- **Description**: This is an example plugin.
-- **Usage**: Type /example to see the plugin in action.
-"""
-)
-async def example(client: Client, message: Message):
-    await message.reply("Example plugin is active!")
