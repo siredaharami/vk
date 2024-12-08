@@ -31,7 +31,7 @@ async def help(client: Client, message: Message):
             help_text += f"🔨 {plugin}\n"
 
         # Add photo if you have one
-        photo_url = "https://your_image_url_here.com/photo.jpg"  # Replace with your actual photo URL
+        photo_url = "https://files.catbox.moe/xwygzj.jpg"  # Replace with your actual photo URL
         await message.reply_photo(photo_url, caption=help_text)
     else:
         await message.reply("No plugins added yet.")
