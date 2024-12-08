@@ -24,5 +24,4 @@ async def ping(client, message):
     - **Command**: /admin
     - **Description**: This plugin gives admin-like controls, such as banning users or setting permissions.
     - **Usage**: Type /admin to access admin commands.
-    """
-)
+    """)
