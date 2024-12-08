@@ -57,13 +57,11 @@ async def inline_help_menu(client, message):
             print(f"Unexpected error: {e}")
             await message.reply_text("⚠️ An unexpected error occurred. Please try again later.")
             break
-    finally:
-        try:
-            await message.delete()
-        except Exception:
-            pass
-
-
+        finally:
+            try:
+                await message.delete()
+            except Exception:
+                pass
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
