@@ -5,9 +5,12 @@ from CakeMusic import app
 # Dictionary to store plugin details automatically
 plugin_details = {}
 
-# Register plugin details in a global dictionary
-def register_plugin(plugin_name, plugin_description):
-    plugin_details[plugin_name] = plugin_description
+# Decorator to register plugins automatically
+def plugin(name, description):
+    def decorator(func):
+        plugin_details[name] = description
+        return func
+    return decorator
 
 # Command to show help (list of available plugins)
 @app.on_message(filters.command("help"))
@@ -15,7 +18,7 @@ async def help(client: Client, message: Message):
     if plugin_details:
         help_text = "Available Plugins:\n\n"
         
-        # Add emojis and plugins in two rows
+        # Split plugins into two rows
         plugin_list = list(plugin_details.keys())
         row_1 = plugin_list[:5]
         row_2 = plugin_list[5:10]
@@ -31,7 +34,7 @@ async def help(client: Client, message: Message):
             help_text += f"🔨 {plugin}\n"
 
         # Add photo if you have one
-        photo_url = "https://files.catbox.moe/xwygzj.jpg"  # Replace with your actual photo URL
+        photo_url = "https://your_image_url_here.com/photo.jpg"  # Replace with your actual photo URL
         await message.reply_photo(photo_url, caption=help_text)
     else:
         await message.reply("No plugins added yet.")
@@ -50,45 +53,17 @@ async def plugin_details_command(client: Client, message: Message):
     else:
         await message.reply(f"No details found for plugin '{plugin_name}'.")
 
-# Example of the Ping plugin
-@app.on_message(filters.command("ping"))
-async def ping(client: Client, message: Message):
-    plugin_name = "ping"
-    plugin_description = """
-    **Ping Plugin**
-    - **Command**: /ping
-    - **Description**: This plugin responds with 'Pong!' to check if the bot is alive.
-    - **Usage**: Type /ping to check if the bot is responsive.
-    """
-    register_plugin(plugin_name, plugin_description)
-    
-    await message.reply("Ping plugin is active!")
-
-# Example of the Song plugin
-@app.on_message(filters.command("song"))
-async def song(client: Client, message: Message):
-    plugin_name = "song"
-    plugin_description = """
-    **Song Plugin**
-    - **Command**: /song <song_name>
-    - **Description**: This plugin allows you to search and play songs.
-    - **Usage**: Type /song <song_name> to search for a song.
-    """
-    register_plugin(plugin_name, plugin_description)
-    
-    await message.reply("Song plugin is active!")
-
-# Example of the Admin plugin
-@app.on_message(filters.command("admin"))
-async def admin(client: Client, message: Message):
-    plugin_name = "admin"
-    plugin_description = """
-    **Admin Plugin**
-    - **Command**: /admin
-    - **Description**: This plugin gives admin-like controls, such as banning users or setting permissions.
-    - **Usage**: Type /admin to access admin commands.
-    """
-    register_plugin(plugin_name, plugin_description)
-    
-    await message.reply("Admin plugin is active!")
-    
+# Add your plugins here using the @plugin decorator
+# Example:
+# @app.on_message(filters.command("example"))
+# @plugin(
+#     name="example",
+#     description="""
+#     **Example Plugin**
+#     - **Command**: /example
+#     - **Description**: This is an example plugin.
+#     - **Usage**: Type /example to see the plugin in action.
+#     """
+# )
+# async def example(client: Client, message: Message):
+#     await message.reply("Example plugin is active!")
