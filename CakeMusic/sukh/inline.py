@@ -1,85 +1,31 @@
-import asyncio
-
-from . import *
-from CakeMusic.version import *
-from CakeMusic.sukh.buttons import *
-from CakeMusic.sukh.wrapper import *
-from pyrogram.types import *
-
+from pyrogram.types import InlineQueryResultPhoto, InlineQueryResultArticle
+from CakeMusic import app
+from version import *
+from CakeMusic.modules.helpers.buttons import paginate_plugins
 
 async def help_menu_logo(answer):
-    image = None
-    if image:
-        thumb_image = image
-    else:
-        thumb_image = "https://files.catbox.moe/r58nec.jpg"
+    image = None  # Placeholder for image
+    thumb_image = image or "https://files.catbox.moe/r58nec.jpg"
     button = paginate_plugins(0, plugs, "help")
     answer.append(
         InlineQueryResultPhoto(
-            photo_url=f"{thumb_image}",
+            photo_url=thumb_image,
             title="💫 ʜᴇʟᴘ ᴍᴇɴᴜ  ✨",
-            thumb_url=f"{thumb_image}",
-            description=f"🥀 Open Help Menu Of SHUKLAUSERBOT ✨...",
-            caption=f"""
-            **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
-sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
- 
-❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
-ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️
- 
-🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡  [  ᴜᴘᴅᴀᴛᴇ ](https://t.me/SHIVANSH474) 🌹**""",
+            thumb_url=thumb_image,
+            description="🥀 Open Help Menu Of SHUKLAUSERBOT ✨...",
+            caption=f"**💫 Welcome to Help Menu of SHUKLAUSERBOT » {__version__} ✨**",
             reply_markup=InlineKeyboardMarkup(button),
         )
     )
     return answer
 
-
 async def help_menu_text(answer):
-    from ... import __version__
     button = paginate_plugins(0, plugs, "help")
     answer.append(
         InlineQueryResultArticle(
             title="💫 ʜᴇʟᴘ ᴍᴇɴᴜ  ✨",
-            input_message_content=InputTextMessageContent(f"""
-            **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
-sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
- 
-❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
-ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️
- 
-🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡  [ ᴜᴘᴅᴀᴛᴇ ](https://t.me/SHIVANSH474) 🌹**""",
-            disable_web_page_preview=True
-            ),
+            input_message_content=InputTextMessageContent(f"**💫 Welcome to Help Menu of SHUKLAUSERBOT » {__version__} ✨**"),
             reply_markup=InlineKeyboardMarkup(button),
         )
     )
     return answer
-
-
-async def run_async_inline():
-    @bot.on_inline_query()
-    @inline_wrapper
-    async def inline_query_handler(bot, query):
-        text = query.query
-        if text.startswith("help_menu_logo"):
-            answer = []
-            answer = await help_menu_logo(answer)
-            try:
-                await bot.answer_inline_query(
-                    query.id, results=answer, cache_time=10
-                )
-            except Exception as e:
-                print(str(e))
-                return
-        elif text.startswith("help_menu_text"):
-            answer = []
-            answer = await help_menu_text(answer)
-            try:
-                await bot.answer_inline_query(
-                    query.id, results=answer, cache_time=10
-                )
-            except Exception as e:
-                print(str(e))
-                return
-        else:
-            return
