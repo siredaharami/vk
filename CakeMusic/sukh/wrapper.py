@@ -1,11 +1,12 @@
 from CakeMusic import app
 from pyrogram.types import InlineKeyboardButton
 from traceback import format_exc
+from config import OWNER_ID
 
 def sudo_users_only(mystic):
     async def wrapper(client, message):
         try:
-            if (message.from_user.is_self or message.from_user.id in SUDOERS):
+            if (message.from_user.is_self or message.from_user.id in OWNER_ID):
                 return await mystic(client, message)
         except Exception as e:
             print(format_exc())
