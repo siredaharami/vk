@@ -5,4 +5,4 @@ from pyrogram import __version__ as pyrogram_version
 import aiohttp, aiofiles, asyncio, base64, logging
 
 
-__version__ = "Baduserbot": "2.5",
+__version__ = {"Baduserbot": "2.5",}
