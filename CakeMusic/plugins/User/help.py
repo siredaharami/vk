@@ -7,6 +7,43 @@ from CakeMusic.sukh.buttons import *
 from CakeMusic.sukh.inline import *
 from CakeMusic.sukh.wrapper import *
 
+from pyrogram.errors import UsernameNotFound, BotResponseTimeout, PeerIdInvalid, RPCError
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
+async def inline_help_menu(app, query):
+    try:
+        # Wrap the code that causes the error in try-except block
+        bot_results = await app.get_inline_bot_results(query)
+        # Handle successful bot results here
+        return bot_results
+    except UsernameNotFound as e:
+        # Handle case when username is not found
+        logging.error(f"Username not found: {e}")
+        return "Sorry, the username you are looking for is not available."
+    except BotResponseTimeout as e:
+        # Handle bot response timeout
+        logging.error(f"Bot response timed out: {e}")
+        return "The bot took too long to respond, please try again later."
+    except PeerIdInvalid as e:
+        # Handle invalid peer ID
+        logging.error(f"Invalid peer ID: {e}")
+        return "The peer ID provided is invalid."
+    except RPCError as e:
+        # Handle any other RPC errors
+        logging.error(f"RPC error occurred: {e}")
+        return "An error occurred while communicating with the Telegram servers. Please try again."
+    except Exception as e:
+        # Catch any other unexpected exceptions
+        logging.error(f"Unexpected error: {e}")
+        return "An unexpected error occurred. Please try again."
+
+# Now you can call the inline_help_menu function
+# Example usage
+# bot_results = await inline_help_menu(app, query)
+
 @app.on_message(filters.command("help2"))
 async def inline_help_menu(client, message):
     image = None
