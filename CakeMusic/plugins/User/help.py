@@ -1,86 +1,94 @@
-from pyrogram import filters
-from pyrogram.types import (
-    InlineKeyboardMarkup,
-    InlineQuery,
-    InlineQueryResultArticle,
-    InputTextMessageContent,
-    InlineKeyboardButton
-)
-from CakeMusic import bot  # Importing the app from CakeMusic
+from pyrogram import Client, filters
+from pyrogram.types import Message
+from CakeMusic import app
 
-# Constants (Previously in Config)
-AUTH_USERS = [7009601543, 7475631398]  # List of user IDs who can access the help menu
-CMD_MENU = ["Plugin1", "Plugin2", "Plugin3", "Plugin4"]  # List of plugin names
-CMD_INFO = {"Plugin1": "Description of Plugin1", "Plugin2": "Description of Plugin2"}  # Command descriptions
+# Dictionary to store plugin details automatically
+plugin_details = {}
 
-# Helper functions (Previously in btnsG and templates)
-async def gen_inline_help_buttons(page_number, cmd_menu):
-    buttons = []
-    items_per_page = 5  # Number of items to display per page
-    start = page_number * items_per_page
-    end = start + items_per_page
-    cmd_page = cmd_menu[start:end]
+# Register plugin details in a global dictionary
+def register_plugin(plugin_name, plugin_description):
+    plugin_details[plugin_name] = plugin_description
 
-    for cmd in cmd_page:
-        buttons.append([InlineKeyboardButton(cmd, callback_data=f'help_{cmd}')])
+# Command to show help (list of available plugins)
+@app.on_message(filters.command("help"))
+async def help(client: Client, message: Message):
+    if plugin_details:
+        help_text = "Available Plugins:\n\n"
+        
+        # Add emojis and plugins in two rows
+        plugin_list = list(plugin_details.keys())
+        row_1 = plugin_list[:5]
+        row_2 = plugin_list[5:10]
 
-    # Add pagination buttons (if there are multiple pages)
-    prev_page = InlineKeyboardButton("Previous", callback_data=f'help_prev_{page_number-1}' if page_number > 0 else 'help_prev_0')
-    next_page = InlineKeyboardButton("Next", callback_data=f'help_next_{page_number+1}' if end < len(cmd_menu) else 'help_next_0')
-    buttons.append([prev_page, next_page])
+        # First row of plugins with emojis
+        help_text += "🛠️ Plugins Row 1:\n"
+        for plugin in row_1:
+            help_text += f"🔧 {plugin}\n"
+        
+        # Second row of plugins with emojis
+        help_text += "\n🛠️ Plugins Row 2:\n"
+        for plugin in row_2:
+            help_text += f"🔨 {plugin}\n"
 
-    total_pages = (len(cmd_menu) + items_per_page - 1) // items_per_page  # Calculate total pages
-    return buttons, total_pages
+        # Add photo if you have one
+        photo_url = "https://your_image_url_here.com/photo.jpg"  # Replace with your actual photo URL
+        await message.reply_photo(photo_url, caption=help_text)
+    else:
+        await message.reply("No plugins added yet.")
 
-async def help_template(user_mention, cmd_stats, page_stats):
-    no_of_commands, no_of_plugins = cmd_stats
-    current_page, total_pages = page_stats
-
-    caption = f"""
-    **HellBot Help Menu 🍀**
-    _Hey {user_mention}, here are your commands:_
-
-    Total Commands: {no_of_commands}
-    Total Plugins: {no_of_plugins}
-    
-    _Page {current_page}/{total_pages}_
-
-    Type `/help` to get more detailed command info.
-    """
-
-    return caption
-
-# Inline query handler
-@bot.on_inline_query(filters.regex(r"help_menu"))
-async def help_inline(_, query: InlineQuery):
-    # Check if the user is authorized to access the help menu
-    if not query.from_user.id in AUTH_USERS:
+# Command to show plugin details by name
+@app.on_message(filters.command("plugin_details"))
+async def plugin_details_command(client: Client, message: Message):
+    if len(message.command) < 2:
+        await message.reply("Please provide the plugin name.")
         return
+    
+    plugin_name = message.command[1]
+    
+    if plugin_name in plugin_details:
+        await message.reply(plugin_details[plugin_name])
+    else:
+        await message.reply(f"No details found for plugin '{plugin_name}'.")
 
-    # Count the number of plugins and commands available
-    no_of_plugins = len(CMD_MENU)
-    no_of_commands = len(CMD_INFO)
+# Example of the Ping plugin
+@app.on_message(filters.command("ping"))
+async def ping(client: Client, message: Message):
+    plugin_name = "ping"
+    plugin_description = """
+    **Ping Plugin**
+    - **Command**: /ping
+    - **Description**: This plugin responds with 'Pong!' to check if the bot is alive.
+    - **Usage**: Type /ping to check if the bot is responsive.
+    """
+    register_plugin(plugin_name, plugin_description)
+    
+    await message.reply("Ping plugin is active!")
 
-    # Generate the inline help buttons and determine the number of pages
-    buttons, pages = await gen_inline_help_buttons(0, sorted(CMD_MENU))
+# Example of the Song plugin
+@app.on_message(filters.command("song"))
+async def song(client: Client, message: Message):
+    plugin_name = "song"
+    plugin_description = """
+    **Song Plugin**
+    - **Command**: /song <song_name>
+    - **Description**: This plugin allows you to search and play songs.
+    - **Usage**: Type /song <song_name> to search for a song.
+    """
+    register_plugin(plugin_name, plugin_description)
+    
+    await message.reply("Song plugin is active!")
 
-    # Prepare the help caption with a dynamic response
-    caption = await help_template(
-        query.from_user.mention, (no_of_commands, no_of_plugins), (1, pages)
-    )
-
-    # Answer the inline query with the formatted results and inline keyboard
-    await query.answer(
-        results=[
-            InlineQueryResultArticle(
-                title="HellBot Help Menu 🍀",  # Title displayed in the inline result
-                input_message_content=InputTextMessageContent(
-                    caption,  # Content to send in the chat
-                    disable_web_page_preview=True,
-                ),
-                description="Inline Query for Help Menu of HellBot",  # Description displayed in the inline query preview
-                reply_markup=InlineKeyboardMarkup(buttons),  # Inline keyboard with buttons for navigation
-            )
-        ],
-        cache_time=0,  # Set to 0 for dynamic updates, increase for caching
-    )
+# Example of the Admin plugin
+@app.on_message(filters.command("admin"))
+async def admin(client: Client, message: Message):
+    plugin_name = "admin"
+    plugin_description = """
+    **Admin Plugin**
+    - **Command**: /admin
+    - **Description**: This plugin gives admin-like controls, such as banning users or setting permissions.
+    - **Usage**: Type /admin to access admin commands.
+    """
+    register_plugin(plugin_name, plugin_description)
+    
+    await message.reply("Admin plugin is active!")
+    
