@@ -8,6 +8,10 @@ plugin_details = {}
 # Global variable to keep track of the current plugin being viewed
 current_plugin_index = {}
 
+# Group and Owner Links
+GROUP_LINK = "https://t.me/ll_BAD_MUNDA_WORLD_ll"
+OWNER_LINK = "https://t.me/HEROKUBIN_01"
+
 # Decorator to register plugins automatically
 def plugin(name, description):
     def decorator(func):
@@ -36,6 +40,9 @@ async def help(client: Client, message: Message):
 # Plugin Details:
 # Command: {plugin_name}
 {plugin_description}
+
+# Group: {GROUP_LINK}
+# Owner: {OWNER_LINK}
 ```"""
             # Update the current plugin index for the user
             current_plugin_index[message.from_user.id] = plugin_number
@@ -63,7 +70,11 @@ Use `/help <plugin_number>` to learn more about a specific plugin.
                 help_text += f"# {plugin_count}. 🌟 Command: {plugin}\n"
                 plugin_count += 1
 
-        help_text += "```"
+        help_text += f"""```
+
+🔗 **Group**: {GROUP_LINK}
+👑 **Owner**: {OWNER_LINK}
+"""
 
         # Add photo if you have one
         photo_url = "https://files.catbox.moe/0iv0j2.jpg"  # Replace with your actual photo URL
@@ -88,6 +99,9 @@ async def next_plugin(client: Client, message: Message):
 # Plugin Details:
 # Command: {plugin_name}
 {plugin_description}
+
+# Group: {GROUP_LINK}
+# Owner: {OWNER_LINK}
 ```"""
         current_plugin_index[user_id] = current_index
         await message.reply(formatted_description)
@@ -113,6 +127,9 @@ async def back_plugin(client: Client, message: Message):
 # Plugin Details:
 # Command: {plugin_name}
 {plugin_description}
+
+# Group: {GROUP_LINK}
+# Owner: {OWNER_LINK}
 ```"""
         current_plugin_index[user_id] = current_index
         await message.reply(formatted_description)
