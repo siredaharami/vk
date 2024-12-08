@@ -67,7 +67,7 @@ def generate_help_menu(page: int, is_assistant: bool):
 
 # Command handler for /help command
 @app.on_message(filters.command("helpp"))
-async def inline_help(client, message):
+async def help_inline(_, query: InlineQuery):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
     current_page = 0
