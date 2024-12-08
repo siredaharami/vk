@@ -38,6 +38,7 @@ async def get_cached_inline_results(query):
     return results
     logging.debug(f"Fetching inline results for query: {query}")
 
+@app.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
     image = None
     try:
