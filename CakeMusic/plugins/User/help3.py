@@ -16,7 +16,7 @@ def plugin(name, description):
     return decorator
 
 # Command to show help (list of available plugins with numbers or specific details)
-@app.on_message(filters.command("help"))
+@app.on_message(filters.command("helhp"))
 async def help(client: Client, message: Message):
     global current_plugin_index
 
