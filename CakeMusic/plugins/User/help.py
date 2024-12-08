@@ -3,7 +3,7 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from CakeMusic import app, bot, plugs
-from CakeMusic.version import *
+from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import paginate_plugins
 from CakeMusic.sukh.wrapper import cb_wrapper, sudo_users_only
 from pyrogram.errors import RPCError, BotResponseTimeout
@@ -26,7 +26,7 @@ async def fetch_inline_results(bot_username, query, retries=2, delay=3):
             await asyncio.sleep(delay)
     raise Exception("Failed to fetch inline results after retries")
     
-cache_time=10
+cache = {}
 
 async def get_cached_inline_results(query):
     """Fetch cached results or generate new ones."""
@@ -40,19 +40,39 @@ async def get_cached_inline_results(query):
 
 @app.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
+    image = None
     try:
-        bot_username = f"@{bot.me.username}"
-        query = "help_menu_text"
-        bot_results = await fetch_inline_results(bot_username, query)
-        
+        if image:
+            bot_results = await app.get_inline_bot_results(
+                f"@{bot.me.username}", "help_menu_logo"
+            )
+        else:
+            bot_results = await app.get_inline_bot_results(
+                f"@{bot.me.username}", "help_menu_text"
+            )
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
             query_id=bot_results.query_id,
             result_id=bot_results.results[0].id,
         )
-        await message.delete()
+    except Exception:
+        bot_results = await app.get_inline_bot_results(
+            f"@{bot.me.username}", "help_menu_text"
+        )
+        await app.send_inline_bot_result(
+            chat_id=message.chat.id,
+            query_id=bot_results.query_id,
+            result_id=bot_results.results[0].id,
+        )
     except Exception as e:
-        logging.error(f"Error in inline_help_menu: {e}")
+        print(e)
+        return
+
+    try:
+        await message.delete()
+    except:
+        pass
+      
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
@@ -66,7 +86,7 @@ async def help_button(client, query):
 
         top_text = f"""
 **💫 Welcome to the Help Menu Op.
-Shukla UserBot  » {version} ✨**
+Shukla UserBot  » {__version__} ✨**
 
 ❤️ Click the buttons below to explore commands. ❤️
 
@@ -75,8 +95,8 @@ Shukla UserBot  » {version} ✨**
         if plug_match:
             plugin = plug_match.group(1)
             text = (
-                f"💫 Welcome to the help menu for plugin ✨ {plugs[plugin].NAME}\n"
-                + plugs[plugin].MENU
+                f"**💫 Welcome to the help menu for plugin ✨ {plugs[plugin].__NAME__}**\n"
+                + plugs[plugin].__MENU__
             )
             key = InlineKeyboardMarkup(
                 [[InlineKeyboardButton("↪️ Back", callback_data="help_back")]]
@@ -97,7 +117,8 @@ Shukla UserBot  » {version} ✨**
         elif next_match:
             next_page = int(next_match.group(1))
             await bot.edit_inline_text(
-                query.inline_message_id,text=top_text,
+                query.inline_message_id,
+                text=top_text,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_plugins(next_page + 1, plugs, "help")
                 ),
@@ -111,4 +132,4 @@ Shukla UserBot  » {version} ✨**
                 disable_web_page_preview=True,
             )
     except Exception as e:
-        logging.error(f"Error in help_button: {e}")
+        logging.error(f"Error in `help_button`: {e}")
