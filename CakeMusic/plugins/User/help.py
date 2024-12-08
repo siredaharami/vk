@@ -43,14 +43,14 @@ async def inline_help_menu(client, message):
     try:
         if image:
             bot_results = await app.get_inline_bot_results(
-                f"@{bot.me.username}", "help_menu_logo"
+                f"@PBXMUSICUSER_BOT ", "help_menu_logo"
             )
         else:
             # Removed timeout argument as it's not supported
             query = "help_menu_text"  # Ensure this query is valid and correctly defined
             bot_results = await app.get_inline_bot_results(query)
             bot_results = await app.get_inline_bot_results(
-                f"@{bot.me.username}", "help_menu_text"
+                f"@PBXMUSICUSER_BOT ", "help_menu_text"
             )
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
@@ -60,7 +60,7 @@ async def inline_help_menu(client, message):
     except Exception as e:
         print(f"Error: {e}")
         bot_results = await app.get_inline_bot_results(
-            f"@{bot.me.username}", "help_menu_text"
+            f"@PBXMUSICUSER_BOT ", "help_menu_text"
         )
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
@@ -149,4 +149,4 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
                 paginate_plugins(0, plugs, "help")
             ),
             disable_web_page_preview=True,
-        )
+)
