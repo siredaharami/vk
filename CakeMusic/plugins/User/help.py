@@ -38,8 +38,7 @@ async def inline_help_menu(client, message):
         except Exception as e:
             print(f"Unexpected error: {e}")
             break
-
-    finally:
+        finally:
         try:
             await message.delete()
         except Exception:
