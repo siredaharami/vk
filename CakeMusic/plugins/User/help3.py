@@ -13,7 +13,7 @@ def plugin(name, description):
     return decorator
 
 # Command to show help (list of available plugins with numbers)
-@app.on_message(filters.command("help"))
+@app.on_message(filters.command("help1"))
 async def help(client: Client, message: Message):
     if plugin_details:
         # Custom help text
