@@ -59,10 +59,9 @@ call_config = GroupCallConfig(auto_start=False)
 mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.adityaxdb
 
-
-#HELP
-ids = []
-CMD_HELP = {}
+# Plugins
+from config import PLUGINS
+plugs = PLUGINS
 
 
 #edit reply 
