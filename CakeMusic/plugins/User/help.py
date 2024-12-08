@@ -38,21 +38,40 @@ async def get_cached_inline_results(query):
     return results
     logging.debug(f"Fetching inline results for query: {query}")
 
-@app.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
+    image = None
     try:
-        bot_username = f"@{bot.me.username}"
-        query = "help_menu_text"
-        bot_results = await fetch_inline_results(bot_username, query)
-        
+        if image:
+            bot_results = await app.get_inline_bot_results(
+                f"@{bot.me.username}", "help_menu_logo"
+            )
+        else:
+            bot_results = await app.get_inline_bot_results(
+                f"@{bot.me.username}", "help_menu_text"
+            )
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
             query_id=bot_results.query_id,
             result_id=bot_results.results[0].id,
         )
-        await message.delete()
+    except Exception:
+        bot_results = await app.get_inline_bot_results(
+            f"@{bot.me.username}", "help_menu_text"
+        )
+        await app.send_inline_bot_result(
+            chat_id=message.chat.id,
+            query_id=bot_results.query_id,
+            result_id=bot_results.results[0].id,
+        )
     except Exception as e:
-        logging.error(f"Error in `inline_help_menu`: {e}")
+        print(e)
+        return
+
+    try:
+        await message.delete()
+    except:
+        pass
+      
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
