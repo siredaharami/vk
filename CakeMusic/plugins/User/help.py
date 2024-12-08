@@ -3,7 +3,7 @@ import re
 from pyrogram import *
 from pyrogram.types import *
 
-from . import *
+from CakeMusic import *
 from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import *
 from CakeMusic.sukh.inline import *
