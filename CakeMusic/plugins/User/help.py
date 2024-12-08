@@ -1,28 +1,25 @@
-from pyrogram import filters
+from pyrogram import Client, filters
 from pyrogram.types import (
     InlineKeyboardMarkup,
-    InlineQuery,
+    InlineKeyboardButton,
     InlineQueryResultArticle,
     InputTextMessageContent,
+    InlineQuery
 )
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
-from CakeMusic import *  # Ensure CakeMusic is configured correctly
-from pyrogram.types import Message, InlineQuery
 
-ASSISTANT_ID = 6331052940  # Replace with the actual Telegram ID of your assistant
+ASSISTANT_ID = 6331052940  # Replace with your actual assistant (owner) ID
+SUDO_USERS = [6331052940]  # List of sudo users' IDs (can add more IDs)
 
-# Example plugins list with a real plugin entry
 plugins = [
-    "Music Plugin",  # Example plugin added
+    "Music Plugin",
     "Plugin 2",
     "Plugin 3",
     "Plugin 4",
     "Plugin 5",
 ]
-COMMANDS_PER_PLUGIN = 1  # 1 command per plugin
-PLUGINS_PER_PAGE = 4  # Only 4 plugins per page
+COMMANDS_PER_PLUGIN = 1
+PLUGINS_PER_PAGE = 4
 
-# Descriptions for plugins (optional but helpful)
 plugin_descriptions = {
     "Music Plugin": "Provides music playback commands for the bot.",
     "Plugin 2": "This plugin handles admin tasks.",
@@ -31,7 +28,6 @@ plugin_descriptions = {
     "Plugin 5": "Additional commands to enhance functionality.",
 }
 
-# Commands for plugins (optional)
 plugin_commands = {
     "Music Plugin": ["/play [song name] - Play a song in the chat."],
     "Plugin 2": ["/ban [user] - Ban a user."],
@@ -47,17 +43,14 @@ def generate_help_menu(page: int, is_assistant: bool):
     end = start + PLUGINS_PER_PAGE
     current_plugins = plugins[start:end]
 
-    # Inline buttons for plugins
     buttons = [
         [InlineKeyboardButton(f"✧ {plugin} ✧", callback_data=f"plugin:{plugin[:64]}")]
         for plugin in current_plugins
     ]
 
-    # If the user is the assistant, add an admin-only button
     if is_assistant:
         buttons.append([InlineKeyboardButton("⚙️ Admin Panel", callback_data="admin_panel")])
 
-    # Navigation buttons
     navigation_buttons = []
     if page > 0:
         navigation_buttons.append(InlineKeyboardButton("⬅ PREV", callback_data=f"navigate:{page - 1}"))
@@ -72,8 +65,8 @@ def generate_help_menu(page: int, is_assistant: bool):
 
 
 # Command handler for /help command
-@app.on_message(filters.command("helpp"))
-async def help_inline(_, message: Message):
+@app.on_message(filters.command("help"))
+async def help_command(_, message):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
     current_page = 0
@@ -85,16 +78,21 @@ async def help_inline(_, message: Message):
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
 
-    is_assistant = message.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
+    is_assistant = message.from_user.id == ASSISTANT_ID or message.from_user.id in SUDO_USERS
 
-    # Send the help message with inline keyboard
-    await message.reply(
-        text=header,
-        reply_markup=generate_help_menu(current_page, is_assistant)
-    )
+    if is_assistant:
+        # If the user is the assistant, send inline buttons with the list of plugins
+        await message.reply(
+            text=header,
+            reply_markup=generate_help_menu(current_page, is_assistant)
+        )
+    else:
+        # Regular users get a simple text response
+        await message.reply(
+            text=header
+        )
 
 
-# Inline query handler for the /help command
 # Inline query handler for the /help command
 @bot.on_inline_query()
 async def inline_help(client, inline_query: InlineQuery):
@@ -109,7 +107,7 @@ async def inline_help(client, inline_query: InlineQuery):
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
 
-    is_assistant = inline_query.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
+    is_assistant = inline_query.from_user.id == ASSISTANT_ID or inline_query.from_user.id in SUDO_USERS
 
     # Create inline query result (message content and inline keyboard)
     result = InlineQueryResultArticle(
@@ -119,7 +117,6 @@ async def inline_help(client, inline_query: InlineQuery):
         reply_markup=generate_help_menu(current_page, is_assistant)
     )
 
-    # Answer inline query with the result
     await inline_query.answer([result], cache_time=0)
 
 
@@ -136,7 +133,7 @@ async def navigate_handler(client, callback_query):
         f"📄 Page: {page + 1}/{max_pages}"
     )
 
-    is_assistant = callback_query.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
+    is_assistant = callback_query.from_user.id == ASSISTANT_ID or callback_query.from_user.id in SUDO_USERS
     await callback_query.message.edit_text(
         text=header,
         reply_markup=generate_help_menu(page, is_assistant)
@@ -169,7 +166,7 @@ async def plugin_details_handler(client, callback_query):
 # Handler for the admin panel button (only for assistant)
 @bot.on_callback_query(filters.regex(r"^admin_panel"))
 async def admin_panel_handler(client, callback_query):
-    if callback_query.from_user.id == ASSISTANT_ID:
+    if callback_query.from_user.id == ASSISTANT_ID or callback_query.from_user.id in SUDO_USERS:
         await callback_query.message.edit_text(
             "Welcome to the Admin Panel! Here you can manage advanced settings.",
             reply_markup=InlineKeyboardMarkup([
