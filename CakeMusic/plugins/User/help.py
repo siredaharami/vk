@@ -38,7 +38,7 @@ async def get_cached_inline_results(query):
     return results
     logging.debug(f"Fetching inline results for query: {query}")
 
-@bot.on_message(filters.command("help1"))
+@app.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
     try:
         bot_username = f"@{bot.me.username}"
