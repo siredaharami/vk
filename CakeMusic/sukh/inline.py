@@ -1,7 +1,7 @@
 import asyncio
 
 from . import *
-from version import *
+from CakeMusic.version import *
 from CakeMusic.sukh.buttons import *
 from CakeMusic.sukh.wrapper import *
 from pyrogram.types import *
