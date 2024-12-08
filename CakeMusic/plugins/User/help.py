@@ -16,22 +16,21 @@ def plugin(name, description):
 @app.on_message(filters.command("help"))
 async def help(client: Client, message: Message):
     if plugin_details:
-        help_text = "Available Plugins:\n\n"
-        
-        # Split plugins into two rows
-        plugin_list = list(plugin_details.keys())
-        row_1 = plugin_list[:5]
-        row_2 = plugin_list[5:10]
+        # Custom help text
+        help_text = """
+📚 **Help Menu** 📚
+Below is a list of all available plugins you can use. Each row contains up to 10 plugins.
+Use `/plugin_details <plugin_name>` to learn more about a specific plugin.
 
-        # First row of plugins with emojis
-        help_text += "🛠️ Plugins Row 1:\n"
-        for plugin in row_1:
-            help_text += f"🔧 {plugin}\n"
-        
-        # Second row of plugins with emojis
-        help_text += "\n🛠️ Plugins Row 2:\n"
-        for plugin in row_2:
-            help_text += f"🔨 {plugin}\n"
+"""
+        # Generate plugin rows dynamically
+        plugin_list = list(plugin_details.keys())
+        rows = [plugin_list[i:i + 10] for i in range(0, len(plugin_list), 10)]
+
+        for idx, row in enumerate(rows, start=1):
+            help_text += f"\n🛠️ **Plugins Row {idx}:**\n"
+            for plugin in row:
+                help_text += f"🔧 {plugin}\n"
 
         # Add photo if you have one
         photo_url = "https://files.catbox.moe/xwygzj.jpg"  # Replace with your actual photo URL
@@ -53,17 +52,16 @@ async def plugin_details_command(client: Client, message: Message):
     else:
         await message.reply(f"No details found for plugin '{plugin_name}'.")
 
-# Add your plugins here using the @plugin decorator
-# Example:
-# @app.on_message(filters.command("example"))
-# @plugin(
-#     name="example",
-#     description="""
-#     **Example Plugin**
-#     - **Command**: /example
-#     - **Description**: This is an example plugin.
-#     - **Usage**: Type /example to see the plugin in action.
-#     """
-# )
-# async def example(client: Client, message: Message):
-#     await message.reply("Example plugin is active!")
+# Example plugins added using the @plugin decorator
+@app.on_message(filters.command("example"))
+@plugin(
+    name="example",
+    description="""
+**Example Plugin**
+- **Command**: /example
+- **Description**: This is an example plugin.
+- **Usage**: Type /example to see the plugin in action.
+"""
+)
+async def example(client: Client, message: Message):
+    await message.reply("Example plugin is active!")
