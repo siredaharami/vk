@@ -73,27 +73,28 @@ def generate_help_menu(page: int, is_assistant: bool):
 
 # Command handler for /help command
 @app.on_message(filters.command("helpp"))
-async def help_inline(_, query: InlineQuery):
+async def help_inline(_, message: Message):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
     current_page = 0
     max_pages = (total_plugins - 1) // PLUGINS_PER_PAGE + 1
 
     header = (
-        f"👻 Help Menu for: {query.from_user.mention or 'User'}\n"
+        f"👻 Help Menu for: {message.from_user.mention or 'User'}\n"
         f"📜 Loaded {total_plugins} plugins with a total of {total_commands} commands.\n"
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
 
-    is_assistant = query.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
+    is_assistant = message.from_user.id == ASSISTANT_ID  # Check if the user is the assistant
 
     # Send the help message with inline keyboard
-    await query.answer(
+    await message.reply(
         text=header,
         reply_markup=generate_help_menu(current_page, is_assistant)
     )
 
 
+# Inline query handler for the /help command
 # Inline query handler for the /help command
 @bot.on_inline_query()
 async def inline_help(client, inline_query: InlineQuery):
