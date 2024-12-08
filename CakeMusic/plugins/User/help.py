@@ -12,7 +12,7 @@ import time
 
 logging.basicConfig(level=logging.DEBUG)
 
-async def fetch_inline_results(bot_username, query, retries=3, delay=2):
+async def fetch_inline_results(bot_username, query, retries=2, delay=3):
     """Fetch inline bot results with retries."""
     for attempt in range(retries):
         try:
@@ -25,6 +25,18 @@ async def fetch_inline_results(bot_username, query, retries=3, delay=2):
             logging.warning(f"Timeout on attempt {attempt + 1}/{retries}: {e}")
             await asyncio.sleep(delay)
     raise Exception("Failed to fetch inline results after retries")
+    
+cache = {}
+
+async def get_cached_inline_results(query):
+    """Fetch cached results or generate new ones."""
+    if query in cache:
+        return cache[query]
+    # Generate new results and cache them
+    results = await app.get_inline_bot_results(f"@{bot.me.username}", query)
+    cache[query] = results
+    return results
+    logging.debug(f"Fetching inline results for query: {query}")
 
 @bot.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
