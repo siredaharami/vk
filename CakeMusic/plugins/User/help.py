@@ -6,20 +6,22 @@ from CakeMusic import app, bot, plugs
 from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import paginate_plugins
 from CakeMusic.sukh.wrapper import cb_wrapper, sudo_users_only
-
 import logging
-
 logging.basicConfig(level=logging.DEBUG)
 
-
 from asyncio import sleep
+from pyrogram.errors import RPCError, BotResponseTimeout
 
 @app.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
+    """
+    Sends an inline help menu to the user based on the availability of an image or text.
+    """
+    image = False  # Set to True if you want to fetch "help_menu_logo" instead of "help_menu_text"
     retries = 3
     for attempt in range(retries):
         try:
-            query = "help_menu_logo" if False else "help_menu_text"
+            query = "help_menu_logo" if image else "help_menu_text"
             bot_results = await app.get_inline_bot_results(f"@{bot.me.username}", query)
             await app.send_inline_bot_result(
                 chat_id=message.chat.id,
@@ -27,21 +29,28 @@ async def inline_help_menu(client, message):
                 result_id=bot_results.results[0].id,
             )
             break  # Exit loop if successful
-        except RPCError as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
+        except BotResponseTimeout as e:
+            print(f"Attempt {attempt + 1}: Telegram timeout: {e}")
             if attempt + 1 < retries:
-                await sleep(2)  # Wait before retrying
+                await asyncio.sleep(2)  # Retry after a small delay
             else:
                 await message.reply_text(
-                    "🚨 Couldn't fetch inline results after multiple attempts. Please try again later."
+                    "⚠️ Telegram is taking too long to respond. Please try again later."
                 )
+        except RPCError as e:
+            print(f"Attempt {attempt + 1}: RPC Error: {e}")
+            await message.reply_text("⚠️ An unexpected RPC error occurred. Please try again later.")
+            break
         except Exception as e:
             print(f"Unexpected error: {e}")
-        finally:
-            try:
-                await message.delete()
-            except Exception:
-                pass
+            await message.reply_text("⚠️ An unexpected error occurred. Please try again later.")
+            break
+    finally:
+        try:
+            await message.delete()
+        except Exception:
+            pass
+
 
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
