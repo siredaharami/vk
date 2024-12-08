@@ -13,41 +13,51 @@ def plugin(name, description):
         return func
     return decorator
 
-# Function to create a paste on Carbonara and get the image URL
+# Function to create a Carbonara paste
 def create_carbonara_paste(text: str) -> str:
     url = "https://carbonara.solopov.dev/api/cook"
-    
-    # Payload for Carbonara API
     payload = {
         "code": text,
-        "theme": "seti",  # Example theme
-        "width": 1000,    # Optional
+        "theme": "seti",
+        "width": 1000,
     }
-    
     try:
-        # Send request to Carbonara API
         response = requests.post(url, json=payload)
         
-        # Log the response for debugging
-        if response.status_code != 200:
-            return f"Error: {response.status_code} - {response.text}"  # Log the error response
+        # Debugging response content
+        print(f"Response Status Code: {response.status_code}")
+        print(f"Response Content: {response.text}")
         
-        # Ensure response contains valid JSON
+        if response.status_code != 200:
+            return f"Error: {response.status_code} - {response.text}"
+
         try:
             data = response.json()
         except ValueError:
-            return "Error: Invalid JSON response from the server."
+            return f"Error: Unexpected response format: {response.text[:200]}"
 
-        # Return the URL if present
         if "url" in data:
             return data["url"]
         else:
             return "Error: No URL in the response."
     except requests.RequestException as e:
-        return f"Error while creating paste: {str(e)}"
+        return f"Error while creating Carbonara paste: {str(e)}"
 
-# Command to show help (list of available plugins with Carbonara link)
-@app.on_message(filters.command("help1"))
+# Fallback function to create a Hastebin paste
+def create_hastebin_paste(text: str) -> str:
+    url = "https://hastebin.com/documents"
+    try:
+        response = requests.post(url, data=text.encode("utf-8"))
+        if response.status_code == 200:
+            key = response.json().get("key")
+            if key:
+                return f"https://hastebin.com/{key}.py"
+        return f"Error: {response.status_code} - {response.text}"
+    except requests.RequestException as e:
+        return f"Error while creating Hastebin paste: {str(e)}"
+
+# Command to show help (list of available plugins)
+@app.on_message(filters.command("helpp"))
 async def help(client: Client, message: Message):
     if plugin_details:
         help_text = f"""
@@ -74,12 +84,49 @@ Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
         global plugin_number_map_global
         plugin_number_map_global = plugin_number_map
 
-        # Create Carbonara paste
+        # Try creating a Carbonara paste
         carbonara_url = create_carbonara_paste(help_text.strip())
-        
         if "Error" in carbonara_url:
-            await message.reply(carbonara_url)  # Show detailed error
+            # Fallback to Hastebin if Carbonara fails
+            hastebin_url = create_hastebin_paste(help_text.strip())
+            if "Error" in hastebin_url:
+                await message.reply(hastebin_url)  # Show Hastebin error
+            else:
+                await message.reply(f"Here is the Help Menu (via Hastebin): {hastebin_url}")
         else:
-            await message.reply(f"Here is the Help Menu: {carbonara_url}")
+            await message.reply(f"Here is the Help Menu (via Carbonara): {carbonara_url}")
     else:
         await message.reply("No plugins added yet.")
+
+# Command to show plugin details by number
+@app.on_message(filters.command("plugin_details"))
+async def plugin_details_command(client: Client, message: Message):
+    if len(message.command) < 2:
+        await message.reply("Please provide the plugin number.")
+        return
+
+    try:
+        plugin_number = int(message.command[1])  # Get the plugin number
+    except ValueError:
+        await message.reply("Invalid plugin number. Please provide a valid number.")
+        return
+
+    if plugin_number_map_global.get(plugin_number):
+        plugin_name = plugin_number_map_global[plugin_number]
+        await message.reply(plugin_details[plugin_name])
+    else:
+        await message.reply(f"No details found for plugin number '{plugin_number}'.")
+
+# Example plugins added using the @plugin decorator
+@app.on_message(filters.command("example"))
+@plugin(
+    name="example",
+    description="""
+**Example Plugin**
+- **Command**: /example
+- **Description**: This is an example plugin.
+- **Usage**: Type /example to see the plugin in action.
+"""
+)
+async def example(client: Client, message: Message):
+    await message.reply("Example plugin is active!")
