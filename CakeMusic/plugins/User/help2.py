@@ -17,7 +17,7 @@ def plugin(name, description):
 # Function to create carbon-style image
 def generate_carbon_image(text: str) -> BytesIO:
     # Set font and image size
-    font_path = "./hiroko.ttf"  # Replace with your font file
+    font_path = "CakeMusic/hiroko.ttf"  # Replace with your font file
     font_size = 20
     width, height = 800, 1200  # Adjust dimensions based on content
     padding = 20
