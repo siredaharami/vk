@@ -1,66 +1,35 @@
 import re
+
 from pyrogram import *
 from pyrogram.types import *
+
 from CakeMusic import *
 from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import *
 from CakeMusic.sukh.inline import *
 from CakeMusic.sukh.wrapper import *
-from pyrogram.errors import RPCError, FloodWait
-import logging
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
 
-async def inline_help_menu(app, query):
-    try:
-        # Attempt to get inline results
-        bot_results = await app.get_inline_bot_results(query)
-        return bot_results
-    except FloodWait as e:
-        # Handle rate-limiting errors
-        logging.error(f"Flood wait error: {e}")
-        return f"Please wait for {e.x} seconds before trying again."
-    except RPCError as e:
-        # Handle general RPC errors
-        logging.error(f"RPC error occurred: {e}")
-        return "An error occurred while communicating with the Telegram servers. Please try again."
-    except Exception as e:
-        # Handle any unexpected errors
-        logging.error(f"Unexpected error: {e}")
-        return "An unexpected error occurred. Please try again."
-
-# Example usage:
-# bot_results = await inline_help_menu(app, query)
-
-# Now you can call the inline_help_menu function
-# Example usage
-# bot_results = await inline_help_menu(app, query)
-
-@app.on_message(filters.command("help2"))
+@app.on_message(cdx(["help2"]))
 async def inline_help_menu(client, message):
     image = None
     try:
         if image:
             bot_results = await app.get_inline_bot_results(
-                f"@PBXMUSICUSER_BOT ", "help_menu_logo"
+                f"@{bot.me.username}", "help_menu_logo"
             )
         else:
-            # Removed timeout argument as it's not supported
-            query = "help_menu_text"  # Ensure this query is valid and correctly defined
-            bot_results = await app.get_inline_bot_results(query)
             bot_results = await app.get_inline_bot_results(
-                f"@PBXMUSICUSER_BOT ", "help_menu_text"
+                f"@{bot.me.username}", "help_menu_text"
             )
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
             query_id=bot_results.query_id,
             result_id=bot_results.results[0].id,
         )
-    except Exception as e:
-        print(f"Error: {e}")
+    except Exception:
         bot_results = await app.get_inline_bot_results(
-            f"@PBXMUSICUSER_BOT ", "help_menu_text"
+            f"@{bot.me.username}", "help_menu_text"
         )
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
@@ -73,17 +42,17 @@ async def inline_help_menu(client, message):
 
     try:
         await message.delete()
-    except Exception as e:
-        print(f"Failed to delete message: {e}")
+    except:
         pass
+      
 
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
 async def help_button(client, query):
-    plug_match = re.match(r"help_plugin(.+?)", query.data)
-    prev_match = re.match(r"help_prev(.+?)", query.data)
-    next_match = re.match(r"help_next(.+?)", query.data)
+    plug_match = re.match(r"help_plugin\((.+?)\)", query.data)
+    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
+    next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
     top_text = f"""
 **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
@@ -149,4 +118,5 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
                 paginate_plugins(0, plugs, "help")
             ),
             disable_web_page_preview=True,
-)
+        )
+        
