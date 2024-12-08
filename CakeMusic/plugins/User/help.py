@@ -16,9 +16,9 @@ async def inline_help_menu(client, message):
                 f"@{bot.me.username}", "help_menu_logo"
             )
         else:
-            # Replace 'query' with a valid query string
-            query = "help_menu_text"  # Define query properly here
-            bot_results = await app.get_inline_bot_results(query, timeout=30)
+            # Removed timeout argument as it's not supported
+            query = "help_menu_text"  # Ensure this query is valid and correctly defined
+            bot_results = await app.get_inline_bot_results(query)
             bot_results = await app.get_inline_bot_results(
                 f"@{bot.me.username}", "help_menu_text"
             )
