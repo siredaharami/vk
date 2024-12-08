@@ -16,20 +16,33 @@ def plugin(name, description):
 # Function to create a paste on Carbonara and get the image URL
 def create_carbonara_paste(text: str) -> str:
     url = "https://carbonara.solopov.dev/api/cook"
+    
+    # Payload for Carbonara API (adjusted theme and font)
     payload = {
         "code": text,
-        "theme": "seti",  # You can change this theme to other available options
-        "lang": "text",
-        "font": "Fira Code",  # You can use other fonts available
-        "width": 1000,  # Customize the width if needed
-        "height": 700,  # Customize the height if needed
+        "theme": "seti",  # Example theme, you can change it
+        "lang": "text",   # Ensure this matches with the type of content (plain text)
+        "font": "Fira Code",  # This is a common programming font
+        "width": 1000,     # Optional, adjust as needed
+        "height": 700,     # Optional, adjust as needed
     }
-    response = requests.post(url, json=payload)
     
-    if response.status_code == 200:
-        return response.json().get("url")  # Get the URL of the generated image
-    else:
-        return "Error creating paste."
+    try:
+        # Send request to Carbonara API
+        response = requests.post(url, json=payload)
+        
+        # Check if the request was successful
+        if response.status_code == 200:
+            data = response.json()
+            if "url" in data:
+                return data["url"]  # Return the image URL
+            else:
+                return "Error: No URL in the response."
+        else:
+            # If response status is not 200, show error with response details
+            return f"Error: {response.status_code} - {response.text}"
+    except Exception as e:
+        return f"Error while creating paste: {str(e)}"
 
 # Command to show help (list of available plugins with Carbonara link)
 @app.on_message(filters.command("help"))
@@ -62,8 +75,9 @@ Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
 
         # Create Carbonara paste
         carbonara_url = create_carbonara_paste(help_text.strip())
+        
         if "Error" in carbonara_url:
-            await message.reply(carbonara_url)
+            await message.reply(carbonara_url)  # Show detailed error
         else:
             await message.reply(f"Here is the Help Menu: {carbonara_url}")
     else:
