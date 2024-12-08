@@ -16,12 +16,13 @@ def plugin(name, description):
 @app.on_message(filters.command("help1"))
 async def help(client: Client, message: Message):
     if plugin_details:
-        # Custom help text
+        # Custom help text in Python code format
         help_text = f"""
 📚 **Help Menu** 📚
 Below is a list of all available plugins you can use. There are a total of {len(plugin_details)} plugins.
 Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
 
+```python
 """
         # Generate plugin rows dynamically
         plugin_list = list(plugin_details.keys())
@@ -31,11 +32,13 @@ Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
         plugin_count = 1
 
         for idx, row in enumerate(rows, start=1):
-            help_text += f"\n🛠️ **Plugins Row {idx}:**\n"
+            help_text += f"# Plugins Row {idx}:\n"
             for plugin in row:
-                help_text += f"{plugin_count}. 🔧 {plugin}\n"
+                help_text += f"# {plugin_count}. {plugin}\n"
                 plugin_number_map[plugin_count] = plugin
                 plugin_count += 1
+
+        help_text += "```"
 
         # Save the plugin number map globally
         global plugin_number_map_global
@@ -64,7 +67,7 @@ async def plugin_details_command(client: Client, message: Message):
         plugin_name = plugin_number_map_global[plugin_number]
         # Add the code block for plugin details
         plugin_description = plugin_details[plugin_name]
-        formatted_description = f"```{plugin_description}```"  # Formatting the description as code block
+        formatted_description = f"```python\n{plugin_description}\n```"  # Formatting the description as Python code block
         await message.reply(formatted_description)
     else:
         await message.reply(f"No details found for plugin number '{plugin_number}'.")
