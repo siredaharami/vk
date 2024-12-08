@@ -13,17 +13,25 @@ def plugin(name, description):
         return func
     return decorator
 
-# Function to create a paste on BatBin
-def create_batbin_paste(text: str) -> str:
-    url = "https://batbin.me/api/paste"
-    response = requests.post(url, data={"content": text, "language": "text"})
+# Function to create a paste on Carbonara and get the image URL
+def create_carbonara_paste(text: str) -> str:
+    url = "https://carbonara.solopov.dev/api/cook"
+    payload = {
+        "code": text,
+        "theme": "seti",  # You can change this theme to other available options
+        "lang": "text",
+        "font": "Fira Code",  # You can use other fonts available
+        "width": 1000,  # Customize the width if needed
+        "height": 700,  # Customize the height if needed
+    }
+    response = requests.post(url, json=payload)
     
     if response.status_code == 200:
-        return f"https://batbin.me/{response.text.strip()}"
+        return response.json().get("url")  # Get the URL of the generated image
     else:
         return "Error creating paste."
 
-# Command to show help (list of available plugins with BatBin link)
+# Command to show help (list of available plugins with Carbonara link)
 @app.on_message(filters.command("help"))
 async def help(client: Client, message: Message):
     if plugin_details:
@@ -52,9 +60,12 @@ Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
         global plugin_number_map_global
         plugin_number_map_global = plugin_number_map
 
-        # Create BatBin paste
-        batbin_url = create_batbin_paste(help_text.strip())
-        await message.reply(f"Here is the Help Menu: {batbin_url}")
+        # Create Carbonara paste
+        carbonara_url = create_carbonara_paste(help_text.strip())
+        if "Error" in carbonara_url:
+            await message.reply(carbonara_url)
+        else:
+            await message.reply(f"Here is the Help Menu: {carbonara_url}")
     else:
         await message.reply("No plugins added yet.")
 
