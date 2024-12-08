@@ -2,6 +2,7 @@ import re
 
 from pyrogram import *
 from pyrogram.types import *
+from pyrogram import Client, filters
 
 from CakeMusic import *
 from CakeMusic.version import __version__
@@ -10,7 +11,7 @@ from CakeMusic.sukh.inline import *
 from CakeMusic.sukh.wrapper import *
 
 
-@app.on_message(cdx(["help2"]))
+@app.on_message(filters.command("help2"))
 async def inline_help_menu(client, message):
     image = None
     try:
