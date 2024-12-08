@@ -7,8 +7,8 @@ from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import paginate_plugins
 from CakeMusic.sukh.wrapper import cb_wrapper, sudo_users_only
 
-@app.on_message(filters.command("sukh"))
-@sudo_users_only
+
+@app.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
     """
     Sends an inline help menu to the user based on the availability of an image or text.
