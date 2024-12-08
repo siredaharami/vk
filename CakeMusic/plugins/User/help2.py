@@ -1,8 +1,7 @@
+import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from CakeMusic import app
-from io import BytesIO
-from PIL import Image, ImageDraw, ImageFont
 
 # Dictionary to store plugin details automatically
 plugin_details = {}
@@ -14,40 +13,17 @@ def plugin(name, description):
         return func
     return decorator
 
-# Function to create carbon-style image
-def generate_carbon_image(text: str) -> BytesIO:
-    # Set font and image size
-    font_path = "CakeMusic/hiroko.ttf"  # Replace with your font file
-    font_size = 20
-    width, height = 800, 1200  # Adjust dimensions based on content
-    padding = 20
-
-    # Create an image with white background
-    image = Image.new("RGB", (width, height), "black")
-    draw = ImageDraw.Draw(image)
+# Function to create a paste on BatBin
+def create_batbin_paste(text: str) -> str:
+    url = "https://batbin.me/api/paste"
+    response = requests.post(url, data={"content": text, "language": "text"})
     
-    try:
-        font = ImageFont.truetype(font_path, font_size)
-    except IOError:
-        raise ValueError("Font not found. Please provide a valid font path.")
+    if response.status_code == 200:
+        return f"https://batbin.me/{response.text.strip()}"
+    else:
+        return "Error creating paste."
 
-    # Add text to the image
-    text_x, text_y = padding, padding
-    lines = text.split("\n")
-    for line in lines:
-        draw.text((text_x, text_y), line, fill="white", font=font)
-        text_y += font_size + 5
-
-    # Crop image to content
-    cropped_image = image.crop((0, 0, width, text_y + padding))
-    
-    # Save to BytesIO object
-    output = BytesIO()
-    cropped_image.save(output, format="PNG")
-    output.seek(0)
-    return output
-
-# Command to show help (list of available plugins with numbers as Carbon-style image)
+# Command to show help (list of available plugins with BatBin link)
 @app.on_message(filters.command("help"))
 async def help(client: Client, message: Message):
     if plugin_details:
@@ -76,14 +52,14 @@ Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
         global plugin_number_map_global
         plugin_number_map_global = plugin_number_map
 
-        # Generate Carbon-style image
-        carbon_image = generate_carbon_image(help_text.strip())
-        await message.reply_photo(carbon_image, caption="Here is the Help Menu in Carbon style.")
+        # Create BatBin paste
+        batbin_url = create_batbin_paste(help_text.strip())
+        await message.reply(f"Here is the Help Menu: {batbin_url}")
     else:
         await message.reply("No plugins added yet.")
 
 # Command to show plugin details by number
-@app.on_message(filters.command("help "))
+@app.on_message(filters.command("plugin_details"))
 async def plugin_details_command(client: Client, message: Message):
     if len(message.command) < 2:
         await message.reply("Please provide the plugin number.")
