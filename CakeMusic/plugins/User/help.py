@@ -10,7 +10,7 @@ from CakeMusic.sukh.inline import *
 from CakeMusic.sukh.wrapper import *
 
 
-@app.on_message(cdx(["help2"]))
+@app.on_message(filters.command("help2"))
 async def inline_help_menu(client, message):
     image = None
     try:
