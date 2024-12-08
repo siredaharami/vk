@@ -1,6 +1,6 @@
 from pyrogram.types import InlineQueryResultPhoto, InlineQueryResultArticle
 from CakeMusic import app
-from version import *
+from CakeMusic.version import *
 from CakeMusic.modules.helpers.buttons import paginate_plugins
 
 async def help_menu_logo(answer):
