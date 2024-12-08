@@ -26,11 +26,13 @@ async def inline_help_menu(client, message):
     """
     Sends an inline help menu to the user based on the availability of an image or text.
     """
-    image = False  # Set to True if you want to fetch "help_menu_logo" instead of "help_menu_text"
-    retries = 3
-    for attempt in range(retries):
+    image = False  # Change to True if you want to use the image query
+    query = "help_menu_logo" if image else "help_menu_text"  # Define query before retries
+    max_retries = 3
+    delay = 2  # Initial delay in seconds
+
+    for attempt in range(1, max_retries + 1):
         try:
-            query = "help_menu_logo" if image else "help_menu_text"
             bot_results = await app.get_inline_bot_results(f"@{bot.me.username}", query)
             await app.send_inline_bot_result(
                 chat_id=message.chat.id,
@@ -39,26 +41,27 @@ async def inline_help_menu(client, message):
             )
             break  # Exit loop if successful
         except BotResponseTimeout as e:
-            print(f"Attempt {attempt + 1}: Telegram timeout: {e}")
-            if attempt + 1 < retries:
-                await asyncio.sleep(2)  # Retry after a small delay
+            print(f"Attempt {attempt}: Telegram timeout: {e}")
+            if attempt < max_retries:
+                await asyncio.sleep(delay)
+                delay *= 2  # Exponential backoff
             else:
                 await message.reply_text(
                     "⚠️ Telegram is taking too long to respond. Please try again later."
                 )
         except RPCError as e:
-            print(f"Attempt {attempt + 1}: RPC Error: {e}")
+            print(f"RPC Error: {e}")
             await message.reply_text("⚠️ An unexpected RPC error occurred. Please try again later.")
             break
         except Exception as e:
             print(f"Unexpected error: {e}")
             await message.reply_text("⚠️ An unexpected error occurred. Please try again later.")
             break
-        finally:
-            try:
-                await message.delete()
-            except Exception:
-                pass
+    finally:
+        try:
+            await message.delete()
+        except Exception:
+            pass
 
 
 
