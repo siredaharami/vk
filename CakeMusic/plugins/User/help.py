@@ -19,6 +19,8 @@ async def inline_help_menu(client, message):
                 f"@{bot.me.username}", "help_menu_logo"
             )
         else:
+            bot_results = await app.get_inline_bot_results(query, timeout=30)  # Increase timeout as needed
+        else:
             bot_results = await app.get_inline_bot_results(
                 f"@{bot.me.username}", "help_menu_text"
             )
