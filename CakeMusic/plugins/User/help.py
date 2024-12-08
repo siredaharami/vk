@@ -13,6 +13,7 @@ async def inline_help_menu(client, message):
     """
     Sends an inline help menu to the user based on the availability of an image or text.
     """
+    image = False  # Set to True if you want to fetch "help_menu_logo" instead of "help_menu_text"
     try:
         query = "help_menu_logo" if image else "help_menu_text"
         bot_results = await app.get_inline_bot_results(f"@{bot.me.username}", query)
