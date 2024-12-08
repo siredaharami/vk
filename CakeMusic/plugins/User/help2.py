@@ -17,11 +17,10 @@ def plugin(name, description):
 def create_carbonara_paste(text: str) -> str:
     url = "https://carbonara.solopov.dev/api/cook"
     
-    # Payload for Carbonara API (adjusted to remove 'lang' and use other correct parameters)
+    # Payload for Carbonara API (removed 'font' and kept other relevant parameters)
     payload = {
         "code": text,
         "theme": "seti",  # Example theme, you can change it
-        "font": "Fira Code",  # This is a common programming font
         "width": 1000,     # Optional, adjust as needed
         "height": 700,     # Optional, adjust as needed
     }
