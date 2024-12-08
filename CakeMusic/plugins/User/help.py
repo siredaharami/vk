@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.DEBUG)
 import time
 
 start_time = time.time()
-bot_results = await app.get_inline_bot_results(f"@{bot.me.username}", query)
+bot_results = app.get_inline_bot_results(f"@{bot.me.username}", query)
 end_time = time.time()
 print(f"Inline query processing time: {end_time - start_time} seconds")
 
