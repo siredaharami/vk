@@ -83,7 +83,7 @@ Use `/plugin_details <plugin_number>` to learn more about a specific plugin.
         await message.reply("No plugins added yet.")
 
 # Command to show plugin details by number
-@app.on_message(filters.command("plugin_details"))
+@app.on_message(filters.command("help "))
 async def plugin_details_command(client: Client, message: Message):
     if len(message.command) < 2:
         await message.reply("Please provide the plugin number.")
