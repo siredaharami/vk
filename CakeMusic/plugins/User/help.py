@@ -3,7 +3,7 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from CakeMusic import app, bot, plugs
-from CakeMusic.version import version
+from CakeMusic.version import *
 from CakeMusic.sukh.buttons import paginate_plugins
 from CakeMusic.sukh.wrapper import cb_wrapper, sudo_users_only
 from pyrogram.errors import RPCError, BotResponseTimeout
