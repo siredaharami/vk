@@ -1,4 +1,4 @@
-asyncio==3.4.3
+aiofiles==24.1.0
 aiohttp==3.10.3
 asyncio==3.4.3
 gitpython==3.1.43
@@ -12,4 +12,4 @@ tgcrypto==1.2.5
 youtube-search-python
 yt-dlp==2024.11.18
 youtube-search
-pyrogram==2.0.106
+git+https://github.com/PyrogramMod/PyrogramMod.git
