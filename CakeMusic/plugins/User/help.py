@@ -1,14 +1,11 @@
 import re
-
 from pyrogram import *
 from pyrogram.types import *
-
 from CakeMusic import *
 from CakeMusic.version import __version__
 from CakeMusic.sukh.buttons import *
 from CakeMusic.sukh.inline import *
 from CakeMusic.sukh.wrapper import *
-
 
 @app.on_message(filters.command("help2"))
 async def inline_help_menu(client, message):
@@ -19,6 +16,8 @@ async def inline_help_menu(client, message):
                 f"@{bot.me.username}", "help_menu_logo"
             )
         else:
+            # Replace 'query' with a valid query string
+            query = "help_menu_text"  # Define query properly here
             bot_results = await app.get_inline_bot_results(query, timeout=30)
             bot_results = await app.get_inline_bot_results(
                 f"@{bot.me.username}", "help_menu_text"
@@ -28,7 +27,8 @@ async def inline_help_menu(client, message):
             query_id=bot_results.query_id,
             result_id=bot_results.results[0].id,
         )
-    except Exception:
+    except Exception as e:
+        print(f"Error: {e}")
         bot_results = await app.get_inline_bot_results(
             f"@{bot.me.username}", "help_menu_text"
         )
@@ -43,17 +43,17 @@ async def inline_help_menu(client, message):
 
     try:
         await message.delete()
-    except:
+    except Exception as e:
+        print(f"Failed to delete message: {e}")
         pass
-      
 
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
 async def help_button(client, query):
-    plug_match = re.match(r"help_plugin\((.+?)\)", query.data)
-    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
-    next_match = re.match(r"help_next\((.+?)\)", query.data)
+    plug_match = re.match(r"help_plugin(.+?)", query.data)
+    prev_match = re.match(r"help_prev(.+?)", query.data)
+    next_match = re.match(r"help_next(.+?)", query.data)
     back_match = re.match(r"help_back", query.data)
     top_text = f"""
 **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
@@ -120,4 +120,3 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
             ),
             disable_web_page_preview=True,
         )
-        
