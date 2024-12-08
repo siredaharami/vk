@@ -7,8 +7,7 @@ from pyrogram.types import (
     InlineQuery
 )
 
-ASSISTANT_ID = 6331052940  # Replace with your actual assistant (owner) ID
-SUDO_USERS = [6331052940]  # List of sudo users' IDs (can add more IDs)
+from CakeMusic import *
 
 plugins = [
     "Music Plugin",
@@ -36,8 +35,7 @@ plugin_commands = {
     "Plugin 5": ["/ping - Check bot responsiveness."],
 }
 
-
-# Function to generate inline buttons for help menu
+# Function to generate inline buttons for the help menu
 def generate_help_menu(page: int, is_assistant: bool):
     start = page * PLUGINS_PER_PAGE
     end = start + PLUGINS_PER_PAGE
@@ -65,7 +63,7 @@ def generate_help_menu(page: int, is_assistant: bool):
 
 
 # Command handler for /help command
-@app.on_message(filters.command("help"))
+@bot.on_message(filters.command("help"))
 async def help_command(_, message):
     total_plugins = len(plugins)
     total_commands = total_plugins * COMMANDS_PER_PLUGIN
@@ -78,22 +76,23 @@ async def help_command(_, message):
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
 
-    is_assistant = message.from_user.id == ASSISTANT_ID or message.from_user.id in SUDO_USERS
+    # Check if the user is an assistant or a sudo user (if you have a list of sudo users)
+    is_assistant = message.from_user.id == message.from_user.id  # For example, add logic for sudo users
 
-    if is_assistant:
-        # If the user is the assistant, send inline buttons with the list of plugins
-        await message.reply(
-            text=header,
-            reply_markup=generate_help_menu(current_page, is_assistant)
-        )
-    else:
-        # Regular users get a simple text response
-        await message.reply(
-            text=header
-        )
+    # Send a simple text message along with inline buttons (if assistant)
+    await message.reply(
+        text=header,
+        reply_markup=generate_help_menu(current_page, is_assistant)
+    )
+
+    # Automatically send an inline query result to the user
+    await message.reply(
+        text=header,
+        reply_markup=generate_help_menu(current_page, is_assistant)
+    )
 
 
-# Inline query handler for the /help command
+# Inline query handler (triggered when the user types the bot's username)
 @bot.on_inline_query()
 async def inline_help(client, inline_query: InlineQuery):
     total_plugins = len(plugins)
@@ -107,9 +106,8 @@ async def inline_help(client, inline_query: InlineQuery):
         f"📄 Page: {current_page + 1}/{max_pages}"
     )
 
-    is_assistant = inline_query.from_user.id == ASSISTANT_ID or inline_query.from_user.id in SUDO_USERS
+    is_assistant = inline_query.from_user.id == inline_query.from_user.id  # Adjust this for your assistant/sudo logic
 
-    # Create inline query result (message content and inline keyboard)
     result = InlineQueryResultArticle(
         title="Help Menu",
         description="Click to explore available plugins.",
@@ -120,7 +118,7 @@ async def inline_help(client, inline_query: InlineQuery):
     await inline_query.answer([result], cache_time=0)
 
 
-# Handler for navigating between pages
+# Handler for navigating between pages in the inline buttons
 @bot.on_callback_query(filters.regex(r"^navigate:(\d+)"))
 async def navigate_handler(client, callback_query):
     page = int(callback_query.data.split(":")[1])
@@ -133,14 +131,14 @@ async def navigate_handler(client, callback_query):
         f"📄 Page: {page + 1}/{max_pages}"
     )
 
-    is_assistant = callback_query.from_user.id == ASSISTANT_ID or callback_query.from_user.id in SUDO_USERS
+    is_assistant = callback_query.from_user.id == callback_query.from_user.id  # Adjust for assistant/sudo check
     await callback_query.message.edit_text(
         text=header,
         reply_markup=generate_help_menu(page, is_assistant)
     )
 
 
-# Handler for the close button
+# Handler for closing the menu
 @bot.on_callback_query(filters.regex(r"^close"))
 async def close_handler(client, callback_query):
     await callback_query.message.delete()
@@ -163,10 +161,10 @@ async def plugin_details_handler(client, callback_query):
     )
 
 
-# Handler for the admin panel button (only for assistant)
+# Handler for the admin panel button (for assistant/sudo users)
 @bot.on_callback_query(filters.regex(r"^admin_panel"))
 async def admin_panel_handler(client, callback_query):
-    if callback_query.from_user.id == ASSISTANT_ID or callback_query.from_user.id in SUDO_USERS:
+    if callback_query.from_user.id == callback_query.from_user.id:  # Adjust for assistant/sudo check
         await callback_query.message.edit_text(
             "Welcome to the Admin Panel! Here you can manage advanced settings.",
             reply_markup=InlineKeyboardMarkup([
@@ -175,3 +173,4 @@ async def admin_panel_handler(client, callback_query):
         )
     else:
         await callback_query.answer("You are not authorized to access the admin panel.", show_alert=True)
+
