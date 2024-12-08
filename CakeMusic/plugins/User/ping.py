@@ -17,3 +17,12 @@ async def ping(client, message):
     # Sending the message with the image
     await message.reply_photo(photo=image_path, caption=reply_text)
   
+@plugin(
+    name="admin",
+    description="""
+    **Admin Plugin**
+    - **Command**: /admin
+    - **Description**: This plugin gives admin-like controls, such as banning users or setting permissions.
+    - **Usage**: Type /admin to access admin commands.
+    """
+)
