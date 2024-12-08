@@ -40,13 +40,11 @@ async def get_cached_inline_results(query):
 
 @bot.on_message(filters.command("help1"))
 async def inline_help_menu(client, message):
-    """Send the inline help menu."""
     try:
         bot_username = f"@{bot.me.username}"
         query = "help_menu_text"
-
         bot_results = await fetch_inline_results(bot_username, query)
-
+        
         await app.send_inline_bot_result(
             chat_id=message.chat.id,
             query_id=bot_results.query_id,
