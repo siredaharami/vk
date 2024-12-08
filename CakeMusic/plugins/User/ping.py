@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from config import OWNER_ID
 from CakeMusic import *
-from CakeMusic.plugins.User.help import *
+from CakeMusic.plugins.User.help2 import *
 
 
 @app.on_message(
